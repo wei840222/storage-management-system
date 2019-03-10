@@ -2,6 +2,6 @@ pipeline:
   push:
     image: plugins/docker
     settings:
-      repo: wei840222/go-helm-rest-api-doc
+      repo: wei840222/apidoc
       secrets: [ docker_username, docker_password ]
       auto_tag: true
