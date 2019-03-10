@@ -2,7 +2,7 @@ pipeline:
   push:
     image: plugins/docker
     settings:
-      dockerfile: api-doc/Dockerfile
+      dockerfile: ./api-doc/Dockerfile
       username:
         from_secret: docker_username
       password:
