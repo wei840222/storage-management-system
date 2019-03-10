@@ -2,7 +2,7 @@ pipeline:
   push:
     image: plugins/docker
     settings:
-      dockerfile: ./api-doc/Dockerfile
-      secrets: [ docker_username, docker_password ]
       repo: wei840222/go-helm-rest/api-doc
+      dockerfile: api-doc
+      secrets: [ docker_username, docker_password ]
       tags: latest
