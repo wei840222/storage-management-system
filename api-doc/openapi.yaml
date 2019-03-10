@@ -109,6 +109,42 @@ paths:
               example:
                 code: 500
                 message: Internal Server Error
+    delete:
+      summary: Delete a specific storage
+      operationId: deleteStorageById
+      tags:
+        - Storage
+      parameters:
+        - name: Id
+          in: path
+          required: true
+          description: The id of the storage to retrieve
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storage'
+              example:
+                id: happy-tree
+                type: minio
+                status: deleted
+                data:
+                  accessKey: aclab
+                  secretKey: csie1226
+                  url: http://140.124.181.74:33790
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: 500
+                message: Internal Server Error
 components:
   schemas:
     Storage:
