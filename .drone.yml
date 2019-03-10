@@ -2,5 +2,5 @@ pipeline:
   push:
     image: plugins/docker
     settings:
-      repo: wei840222/go-helm-rest/api-doc
+      repo: wei840222/go-helm-rest-api-doc
       secrets: [ docker_username, docker_password ]
