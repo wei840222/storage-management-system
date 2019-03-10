@@ -1,0 +1,142 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1-beta
+  title: go-helm-rest
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /storage:
+    get:
+      summary: List all storage
+      operationId: listStorage
+      tags:
+        - Storage
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storages'
+              example:
+              - id: happy-tree
+                type: minio
+                status: active
+                data:
+                  accessKey: aclab
+                  secretKey: csie1226
+                  url: http://140.124.181.74:33790
+              - id: happy-pola
+                type: mongo
+                status: deploying
+                data:
+                  userName: aclab
+                  password: csie1226
+                  db: storage
+                  url: tcp://140.124.181.74:33791
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: 500
+                message: Internal Server Error
+    post:
+      summary: Create a storage
+      operationId: createStorage
+      tags:
+        - Storage
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storage'
+              example:
+                id: happy-tree
+                type: minio
+                status: deploying
+                data:
+                  accessKey: aclab
+                  secretKey: csie1226
+                  url: http://140.124.181.74:33790
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: 500
+                message: Internal Server Error
+  '/storage/{Id}':
+    get:
+      summary: Info for a specific storage
+      operationId: showStorageById
+      tags:
+        - Storage
+      parameters:
+        - name: Id
+          in: path
+          required: true
+          description: The id of the storage to retrieve
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storage'
+              example:
+                id: happy-tree
+                type: minio
+                status: deploying
+                data:
+                  accessKey: aclab
+                  secretKey: csie1226
+                  url: http://140.124.181.74:33790
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: 500
+                message: Internal Server Error
+components:
+  schemas:
+    Storage:
+      required:
+        - id
+        - type
+        - status
+        - data
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+        data:
+          type: object
+    Storages:
+      type: array
+      items:
+        $ref: '#/components/schemas/Storage'
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
