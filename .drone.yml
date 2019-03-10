@@ -3,9 +3,6 @@ pipeline:
     image: plugins/docker
     settings:
       dockerfile: ./api-doc/Dockerfile
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
+      secrets: [ docker_username, docker_password ]
       repo: wei840222/go-helm-rest/api-doc
       tags: latest
