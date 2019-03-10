@@ -17,7 +17,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Storages'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Storage'
               example:
               - id: happy-tree
                 type: minio
@@ -48,6 +50,17 @@ paths:
       operationId: createStorage
       tags:
         - Storage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Storage'
+            example:
+              type: minio
+              data:
+                accessKey: aclab
+                secretKey: csie1226
+                size: 2G
       responses:
         201:
           description: Created
@@ -149,9 +162,7 @@ components:
   schemas:
     Storage:
       required:
-        - id
         - type
-        - status
         - data
       properties:
         id:
@@ -162,10 +173,6 @@ components:
           type: string
         data:
           type: object
-    Storages:
-      type: array
-      items:
-        $ref: '#/components/schemas/Storage'
     Error:
       required:
         - code
