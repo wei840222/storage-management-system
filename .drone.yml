@@ -1,13 +1,11 @@
-kind: pipeline
-
-steps:
-- name: push  
-  image: plugins/docker
-  settings:
-    dockerfile: api-doc/Dockerfile
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-    repo: wei840222/go-helm-rest/api-doc
-    tags: latest
+pipeline:
+  push:
+    image: plugins/docker
+    settings:
+      dockerfile: api-doc/Dockerfile
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: wei840222/go-helm-rest/api-doc
+      tags: latest
