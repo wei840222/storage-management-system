@@ -1,0 +1,4 @@
+FROM redocly/redoc
+COPY ./api-doc/openapi.yaml /usr/share/nginx/html/openapi.yaml
+ENV SPEC_URL openapi.yaml
+EXPOSE 80
