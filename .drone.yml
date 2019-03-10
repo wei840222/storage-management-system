@@ -2,7 +2,7 @@ kind: pipeline
 name: dev
 
 steps:
-- name: docker
+- name: docker-push
   image: plugins/docker
   settings:
     repo: wei840222/go-helm-rest-api-doc
