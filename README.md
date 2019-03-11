@@ -1,4 +1,7 @@
 # go-helm-rest
+  
+### Dep
+helm, helm json
 
 ### API-Doc
 `docker run -it --rm -p 80:80 -v $(PWD)/openapi.yaml:/usr/share/nginx/html/openapi.yaml -e SPEC_URL=openapi.yaml redocly/redoc`
