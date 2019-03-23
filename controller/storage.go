@@ -23,11 +23,21 @@ func CreateStorage(c *gin.Context) {
 	storage.ReleaseName = service.CreateStorage(&storage)
 	storage.Status = service.GetWorkloadStatus(storage.ReleaseName, storage.Type)
 	storage.Endpoint = service.GetServiceEndpoint(storage.ReleaseName, storage.Type)
-	service.Insert2Mongo(&storage)
+	service.InsertStorage(&storage)
 	c.JSON(http.StatusCreated, gin.H{
 		"code":    http.StatusCreated,
 		"message": "Create Storage Success",
 		"data":    storage,
 	})
 
+}
+
+func DeleteStorage(c *gin.Context) {
+	releaseName := c.Param("releaseName")
+	service.DeleteStorage(releaseName)
+	service.DeleteStorageFromMongo(releaseName)
+	c.JSON(http.StatusCreated, gin.H{
+		"code":    http.StatusCreated,
+		"message": "Delete Storage Success",
+	})
 }

@@ -25,3 +25,13 @@ func CreateStorage(storage *model.Storage) string {
 	log.Printf("CreateStorage releaseName: %s", releaseName)
 	return releaseName
 }
+
+func DeleteStorage(realseName string) {
+	cmd := "helm delete --purge " + realseName
+	log.Printf("DeleteStorage cmd: %s", cmd)
+	stdout, err := exec.Command("bash", "-c", cmd).CombinedOutput()
+	if err != nil {
+		panic(err)
+	}
+	log.Printf("DeleteStorage %s", stdout)
+}

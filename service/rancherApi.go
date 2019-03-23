@@ -19,7 +19,7 @@ func GetServiceEndpoint(releaseName string, storageType string) string {
 		panic(err)
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
-	log.Printf("GetServiceEndpoint %s", string(body))
+	// log.Printf("GetServiceEndpoint %s", string(body))
 	addresse := gjson.Get(string(body), "publicEndpoints.0.addresses.0").String()
 	port := gjson.Get(string(body), "publicEndpoints.0.port").String()
 	log.Printf("GetServiceEndpoint http://%s:%s", addresse, port)
@@ -36,7 +36,7 @@ func GetWorkloadStatus(releaseName string, storageType string) string {
 		panic(err)
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
-	log.Printf("GetWorkloadStatus %s", string(body))
+	// log.Printf("GetWorkloadStatus %s", string(body))
 	status := gjson.Get(string(body), "state").String()
 	log.Printf("GetWorkloadStatus %s", status)
 	return status
