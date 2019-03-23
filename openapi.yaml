@@ -59,6 +59,7 @@ paths:
                 secretKey: csie1226
                 persistence.size: 2G
                 service.type: NodePort
+                service.nodePort: ""
                 resources.limits.memory: 512Mi
       responses:
         '201':
@@ -79,6 +80,7 @@ paths:
                     secretKey: csie1226
                     persistence.size: 2G
                     service.type: NodePort
+                    service.nodePort: ""
                     resources.limits.memory: 512Mi
                   endpoint: http://140.124.181.74:32296
                   status: updating

@@ -30,7 +30,16 @@ func CreateStorage(c *gin.Context) {
 		return
 	}
 	storage.ID = bson.NewObjectId()
-	storage.ReleaseName = helm.CreateStorage(&storage)
+	releaseName, err := helm.CreateStorage(&storage)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"error":   http.StatusText(http.StatusBadRequest),
+			"message": err.Error(),
+		})
+		return
+	}
+	storage.ReleaseName = releaseName
 	storage.Status = rancherApi.GetWorkloadStatus(storage.ReleaseName, storage.Type)
 	storage.Endpoint = rancherApi.GetServiceEndpoint(storage.ReleaseName, storage.Type)
 	mongo.InsertStorage(&storage)

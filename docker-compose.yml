@@ -1,0 +1,15 @@
+version: '2'
+services:
+    myapp:
+        build: ./src
+        ports:
+            - 8080:8080
+        depends_on:
+            - mongodb
+    mongodb:
+        image: mongo
+        volumes:
+          - db_data:/data/db
+
+volumes:
+  db_data:

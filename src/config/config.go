@@ -16,5 +16,5 @@ func init() {
 	ApiToken = "token-9s52k:z5m5cwwxft7blkszf8nw2j5th9mlxgjzlmwswk5pgl2bgv87sdvcwc"
 	TypeChartMap = make(map[string]string)
 	TypeChartMap["minio"] = "stable/minio"
-	MongoUrl = "mongodb://localhost:27017"
+	MongoUrl = "mongodb://mongodb:27017"
 }

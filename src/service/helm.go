@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"go-helm-rest/config"
 	"go-helm-rest/model"
 	"log"
@@ -12,7 +13,7 @@ import (
 
 type Helm struct{}
 
-func (h *Helm) CreateStorage(storage *model.Storage) string {
+func (h *Helm) CreateStorage(storage *model.Storage) (string, error) {
 	cmd := "helm json install --set "
 	for key := range storage.Config {
 		cmd += key + "=" + storage.Config[key] + ","
@@ -23,9 +24,12 @@ func (h *Helm) CreateStorage(storage *model.Storage) string {
 	if err != nil {
 		panic(err)
 	}
+	if strings.Contains(string(stdout), "Error") {
+		return "", errors.New(string(stdout))
+	}
 	releaseName := gjson.Get(string(stdout), "releaseName").String()
 	log.Printf("CreateStorage releaseName: %s", releaseName)
-	return releaseName
+	return releaseName, nil
 }
 
 func (h *Helm) DeleteStorage(realseName string) {
