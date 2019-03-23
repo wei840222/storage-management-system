@@ -21,6 +21,19 @@ func (m *Mongo) InsertStorage(storage *model.Storage) {
 	}
 }
 
+func (m *Mongo) ListStorage() *[]model.Storage {
+	session, err := mgo.Dial(config.MongoUrl)
+	if err != nil {
+		panic(err)
+	}
+	defer session.Close()
+	var storageList []model.Storage
+	if err := session.DB("StorageManageSystem").C("Storage").Find(nil).All(&storageList); err != nil {
+		panic(err)
+	}
+	return &storageList
+}
+
 func (m *Mongo) GetStorage(releaseName string) *model.Storage {
 	session, err := mgo.Dial(config.MongoUrl)
 	if err != nil {

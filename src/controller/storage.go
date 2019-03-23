@@ -48,7 +48,20 @@ func CreateStorage(c *gin.Context) {
 		"message": "Create Storage Success",
 		"data":    storage,
 	})
+}
 
+func ListStorage(c *gin.Context) {
+	storageList := mongo.ListStorage()
+	for _, storage := range *storageList {
+		storage.Status = rancherApi.GetWorkloadStatus(storage.ReleaseName, storage.Type)
+		mongo.UpdateStorage(&storage)
+	}
+	storageList = mongo.ListStorage()
+	c.JSON(http.StatusCreated, gin.H{
+		"code":    http.StatusOK,
+		"message": "List Storage Success",
+		"data":    storageList,
+	})
 }
 
 func GetStorage(c *gin.Context) {
