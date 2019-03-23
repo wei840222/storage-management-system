@@ -10,7 +10,9 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-func CreateStorage(storage *model.Storage) string {
+type Helm struct{}
+
+func (h *Helm) CreateStorage(storage *model.Storage) string {
 	cmd := "helm json install --set "
 	for key := range storage.Config {
 		cmd += key + "=" + storage.Config[key] + ","
@@ -26,7 +28,7 @@ func CreateStorage(storage *model.Storage) string {
 	return releaseName
 }
 
-func DeleteStorage(realseName string) {
+func (h *Helm) DeleteStorage(realseName string) {
 	cmd := "helm delete --purge " + realseName
 	log.Printf("DeleteStorage cmd: %s", cmd)
 	stdout, err := exec.Command("bash", "-c", cmd).CombinedOutput()

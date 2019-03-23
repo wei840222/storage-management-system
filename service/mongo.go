@@ -8,7 +8,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func InsertStorage(storage *model.Storage) {
+type Mongo struct{}
+
+func (m *Mongo) InsertStorage(storage *model.Storage) {
 	session, err := mgo.Dial(config.MongoUrl)
 	if err != nil {
 		panic(err)
@@ -19,7 +21,7 @@ func InsertStorage(storage *model.Storage) {
 	}
 }
 
-func GetStorage(releaseName string) *model.Storage {
+func (m *Mongo) GetStorage(releaseName string) *model.Storage {
 	session, err := mgo.Dial(config.MongoUrl)
 	if err != nil {
 		panic(err)
@@ -32,7 +34,7 @@ func GetStorage(releaseName string) *model.Storage {
 	return &storage
 }
 
-func UpdateStorage(storage *model.Storage) {
+func (m *Mongo) UpdateStorage(storage *model.Storage) {
 	session, err := mgo.Dial(config.MongoUrl)
 	if err != nil {
 		panic(err)
@@ -43,7 +45,7 @@ func UpdateStorage(storage *model.Storage) {
 	}
 }
 
-func DeleteStorageFromMongo(releaseName string) {
+func (m *Mongo) DeleteStorage(releaseName string) {
 	session, err := mgo.Dial(config.MongoUrl)
 	if err != nil {
 		panic(err)

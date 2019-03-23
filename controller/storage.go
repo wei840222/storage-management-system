@@ -9,6 +9,16 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
+var helm *service.Helm
+var mongo *service.Mongo
+var rancherApi *service.RancherApi
+
+func init() {
+	helm = &service.Helm{}
+	mongo = &service.Mongo{}
+	rancherApi = &service.RancherApi{}
+}
+
 func CreateStorage(c *gin.Context) {
 	var storage model.Storage
 	if err := c.ShouldBindJSON(&storage); err != nil {
@@ -20,10 +30,10 @@ func CreateStorage(c *gin.Context) {
 		return
 	}
 	storage.ID = bson.NewObjectId()
-	storage.ReleaseName = service.CreateStorage(&storage)
-	storage.Status = service.GetWorkloadStatus(storage.ReleaseName, storage.Type)
-	storage.Endpoint = service.GetServiceEndpoint(storage.ReleaseName, storage.Type)
-	service.InsertStorage(&storage)
+	storage.ReleaseName = helm.CreateStorage(&storage)
+	storage.Status = rancherApi.GetWorkloadStatus(storage.ReleaseName, storage.Type)
+	storage.Endpoint = rancherApi.GetServiceEndpoint(storage.ReleaseName, storage.Type)
+	mongo.InsertStorage(&storage)
 	c.JSON(http.StatusCreated, gin.H{
 		"code":    http.StatusCreated,
 		"message": "Create Storage Success",
@@ -34,9 +44,9 @@ func CreateStorage(c *gin.Context) {
 
 func GetStorage(c *gin.Context) {
 	releaseName := c.Param("releaseName")
-	storage := service.GetStorage(releaseName)
-	storage.Status = service.GetWorkloadStatus(storage.ReleaseName, storage.Type)
-	service.UpdateStorage(storage)
+	storage := mongo.GetStorage(releaseName)
+	storage.Status = rancherApi.GetWorkloadStatus(storage.ReleaseName, storage.Type)
+	mongo.UpdateStorage(storage)
 	c.JSON(http.StatusCreated, gin.H{
 		"code":    http.StatusOK,
 		"message": "Get Storage Success",
@@ -46,8 +56,8 @@ func GetStorage(c *gin.Context) {
 
 func DeleteStorage(c *gin.Context) {
 	releaseName := c.Param("releaseName")
-	service.DeleteStorage(releaseName)
-	service.DeleteStorageFromMongo(releaseName)
+	helm.DeleteStorage(releaseName)
+	mongo.DeleteStorage(releaseName)
 	c.JSON(http.StatusCreated, gin.H{
 		"code":    http.StatusOK,
 		"message": "Delete Storage Success",

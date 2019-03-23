@@ -9,7 +9,9 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-func GetServiceEndpoint(releaseName string, storageType string) string {
+type RancherApi struct{}
+
+func (r *RancherApi) GetServiceEndpoint(releaseName string, storageType string) string {
 	url := config.RancherApiUrl + "/" + config.ServiceApiPath + "/" + config.DeployNameSpace + ":" + releaseName + "-" + storageType
 	req, err := http.NewRequest("GET", url, nil)
 	req.Header.Add("Authorization", "Bearer "+config.ApiToken)
@@ -26,7 +28,7 @@ func GetServiceEndpoint(releaseName string, storageType string) string {
 	return "http://" + addresse + ":" + port
 }
 
-func GetWorkloadStatus(releaseName string, storageType string) string {
+func (r *RancherApi) GetWorkloadStatus(releaseName string, storageType string) string {
 	url := config.RancherApiUrl + "/" + config.WorkloadApiPath + "/deployment:" + config.DeployNameSpace + ":" + releaseName + "-" + storageType
 	req, err := http.NewRequest("GET", url, nil)
 	req.Header.Add("Authorization", "Bearer "+config.ApiToken)
