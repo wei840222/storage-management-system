@@ -91,14 +91,14 @@ paths:
               example:
                 code: 500
                 message: Internal Server Error
-  '/storage/{Id}':
+  '/storage/{releaseName}':
     get:
       summary: Info for a specific storage
       operationId: showStorageById
       tags:
         - Storage
       parameters:
-        - name: Id
+        - name: releaseName
           in: path
           required: true
           description: The id of the storage to retrieve
@@ -141,7 +141,7 @@ paths:
       tags:
         - Storage
       parameters:
-        - name: Id
+        - name: releaseName
           in: path
           required: true
           description: The id of the storage to retrieve
