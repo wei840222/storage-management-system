@@ -10,7 +10,6 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-// CreateStorage new storage by type with given config
 func CreateStorage(storage *model.Storage) string {
 	cmd := "helm json install --set "
 	for key := range storage.Config {

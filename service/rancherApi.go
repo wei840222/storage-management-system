@@ -9,14 +9,10 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-// GetServiceEndpoint get endpoint by service name
 func GetServiceEndpoint(releaseName string, storageType string) string {
 	url := config.RancherApiUrl + "/" + config.ServiceApiPath + "/" + config.DeployNameSpace + ":" + releaseName + "-" + storageType
-	// Create a new request using http
 	req, err := http.NewRequest("GET", url, nil)
-	// add authorization header to the req
 	req.Header.Add("Authorization", "Bearer "+config.ApiToken)
-	// Send req using http Client
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -30,14 +26,10 @@ func GetServiceEndpoint(releaseName string, storageType string) string {
 	return "http://" + addresse + ":" + port
 }
 
-// GetWorkloadStatus get status by release name
 func GetWorkloadStatus(releaseName string, storageType string) string {
 	url := config.RancherApiUrl + "/" + config.WorkloadApiPath + "/deployment:" + config.DeployNameSpace + ":" + releaseName + "-" + storageType
-	// Create a new request using http
 	req, err := http.NewRequest("GET", url, nil)
-	// add authorization header to the req
 	req.Header.Add("Authorization", "Bearer "+config.ApiToken)
-	// Send req using http Client
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
