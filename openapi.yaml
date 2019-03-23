@@ -12,36 +12,33 @@ paths:
       tags:
         - Storage
       responses:
-        200:
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Storage'
+                $ref: '#/components/schemas/Response'
               example:
-              - id: happy-tree
-                type: minio
-                status: active
+                code: 200
+                message: List Storages Success
                 data:
-                  accessKey: aclab
-                  secretKey: csie1226
-                  url: http://140.124.181.74:33790
-              - id: happy-pola
-                type: mongo
-                status: deploying
-                data:
-                  userName: aclab
-                  password: csie1226
-                  db: storage
-                  url: tcp://140.124.181.74:33791
-        500:
+                - id: 2mgm35mm2135m1m5mh
+                  releaseName: happy-tree
+                  type: minio
+                  config:
+                    accessKey: aclab
+                    secretKey: csie1226
+                    persistence.size: 2G
+                    service.type: NodePort
+                    resources.limits.memory: 512Mi
+                  endpoint: http://140.124.181.74:32296
+                  status: updating
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Response'
               example:
                 code: 500
                 message: Internal Server Error
@@ -57,31 +54,40 @@ paths:
               $ref: '#/components/schemas/Storage'
             example:
               type: minio
-              data:
+              config:
                 accessKey: aclab
                 secretKey: csie1226
-                size: 2G
+                persistence.size: 2G
+                service.type: NodePort
+                resources.limits.memory: 512Mi
       responses:
-        201:
+        '201':
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Storage'
+                $ref: '#/components/schemas/Response'
               example:
-                id: happy-tree
-                type: minio
-                status: deploying
+                code: 201
+                message: Create Storage Success
                 data:
-                  accessKey: aclab
-                  secretKey: csie1226
-                  url: http://140.124.181.74:33790
-        500:
+                  id: 2mgm35mm2135m1m5mh
+                  releaseName: happy-tree
+                  type: minio
+                  config:
+                    accessKey: aclab
+                    secretKey: csie1226
+                    persistence.size: 2G
+                    service.type: NodePort
+                    resources.limits.memory: 512Mi
+                  endpoint: http://140.124.181.74:32296
+                  status: updating
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Response'
               example:
                 code: 500
                 message: Internal Server Error
@@ -99,26 +105,33 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Storage'
+                $ref: '#/components/schemas/Response'
               example:
-                id: happy-tree
-                type: minio
-                status: deploying
+                code: 200
+                message: Get Storage Success
                 data:
-                  accessKey: aclab
-                  secretKey: csie1226
-                  url: http://140.124.181.74:33790
-        500:
+                  id: 2mgm35mm2135m1m5mh
+                  releaseName: happy-tree
+                  type: minio
+                  config:
+                    accessKey: aclab
+                    secretKey: csie1226
+                    persistence.size: 2G
+                    service.type: NodePort
+                    resources.limits.memory: 512Mi
+                  endpoint: http://140.124.181.74:32296
+                  status: updating
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Response'
               example:
                 code: 500
                 message: Internal Server Error
@@ -135,26 +148,21 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Storage'
+                $ref: '#/components/schemas/Response'
               example:
-                id: happy-tree
-                type: minio
-                status: deleted
-                data:
-                  accessKey: aclab
-                  secretKey: csie1226
-                  url: http://140.124.181.74:33790
-        500:
+                code: 200
+                message: Delete Storage Success
+        '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/Response'
               example:
                 code: 500
                 message: Internal Server Error
@@ -163,23 +171,30 @@ components:
     Storage:
       required:
         - type
-        - data
+        - config
       properties:
         id:
           type: string
+        releaseName:
+          type: string
         type:
+          type: string
+        config:
+          type: object
+        endpoint:
           type: string
         status:
           type: string
-        data:
-          type: object
-    Error:
+    Response:
       required:
         - code
         - message
       properties:
         code:
           type: integer
-          format: int32
         message:
+          type: string
+        data:
+          type: object
+        error:
           type: string
