@@ -1,6 +1,12 @@
 version: '2'
 services:
-    myapp:
+    web:
+        build: ./web
+        ports:
+            - 80:80
+        depends_on:
+            - api
+    api:
         build: ./api
         ports:
             - 8080:8080
@@ -11,7 +17,15 @@ services:
         ports:
             - 27017:27017
         volumes:
-          - db_data:/data/db
+            - db_data:/data/db
+    api-doc:
+        image: redocly/redoc
+        ports:
+            - 3000:3000
+        environment:
+            - SPEC_URL=openapi.yaml
+        volumes:
+            - ./openapi.yaml:/usr/share/nginx/html/openapi.yaml
 
 volumes:
   db_data:
