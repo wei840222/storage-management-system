@@ -1,26 +1,36 @@
-<template lang="pug">
-  #app
-    Nav
-    Main
-    Footer
+<template>
+  <div id="app">
+    <img src="./assets/logo.png">
+    <div>
+      <p>
+        If Element is successfully added to this project, you'll see an
+        <code v-text="'<el-button>'"></code>
+        below
+      </p>
+      <el-button>el-button</el-button>
+    </div>
+    <Main/>
+  </div>
 </template>
 
 <script>
-import Nav from './components/Nav.vue'
 import Main from './components/Main.vue'
-import Footer from './components/Footer.vue'
 
 export default {
   name: 'app',
-  components: { Nav, Main, Footer }
+  components: {
+    Main
+  }
 }
 </script>
 
-<style lang="sass">
-  #app
-    font-family: 'Avenir', Helvetica, Arial, sans-serif
-    -webkit-font-smoothing: antialiased
-    -moz-osx-font-smoothing: grayscale
-    text-align: center
-    color: #2c3e50
+<style>
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
 </style>
