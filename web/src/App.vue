@@ -1,14 +1,18 @@
 <template lang="pug">
-  #app
-    Main
+  el-container#app
+    el-header
+      Nav
+    el-main
+      Main
 </template>
 
 <script>
+import Nav from './components/Nav.vue'
 import Main from './components/Main.vue'
 
 export default {
   name: 'app',
-  components: { Main }
+  components: { Main, Nav }
 }
 </script>
 
@@ -19,6 +23,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
