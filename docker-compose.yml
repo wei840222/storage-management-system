@@ -1,7 +1,7 @@
 version: '2'
 services:
     myapp:
-        build: ./src
+        build: ./api
         ports:
             - 8080:8080
         depends_on:
