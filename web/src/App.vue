@@ -1,16 +1,6 @@
-<template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <div>
-      <p>
-        If Element is successfully added to this project, you'll see an
-        <code v-text="'<el-button>'"></code>
-        below
-      </p>
-      <el-button>el-button</el-button>
-    </div>
-    <Main/>
-  </div>
+<template lang="pug">
+  #app
+    Main
 </template>
 
 <script>
@@ -18,9 +8,7 @@ import Main from './components/Main.vue'
 
 export default {
   name: 'app',
-  components: {
-    Main
-  }
+  components: { Main }
 }
 </script>
 
