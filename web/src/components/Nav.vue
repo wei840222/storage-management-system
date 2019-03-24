@@ -41,6 +41,7 @@ export default {
         config: this.form
       });
       this.dialogFormVisible = false
+      this.creating = false
     }
   }
 };
