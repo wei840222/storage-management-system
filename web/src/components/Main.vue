@@ -6,8 +6,8 @@
     el-table-column(label="Type" prop="type" sortable)
     el-table-column(label="Size/Capacity" prop="volumeSize" sortable)
       template(slot-scope="scope")
-        el-popover(placement="top-start" title="Size/Capacity" width="150" trigger="hover" :content="Math.ceil(scope.row.volumeSize / 1024 / 1024 *100)/100 + 'Mi' + '/' +scope.row.volumeCapacity")
-          el-progress(slot="reference" :text-inside="true" :stroke-width="18" :percentage="Math.ceil(scope.row.volumeSize / (Number(scope.row.volumeCapacity.split('Gi')[0])*1024*1024*1024) * 100)")
+        el-popover(placement="top-start" width="150" trigger="hover" :content="getSizeString(scope.row.volumeSize) + '/' +scope.row.volumeCapacity")
+          el-progress(slot="reference" :text-inside="true" :stroke-width="18" color="#8e71c7" :percentage="Math.ceil(scope.row.volumeSize / (Number(scope.row.volumeCapacity.split('Gi')[0])*1024*1024*1024) * 100)")
     el-table-column(label="Endpoint" prop="endpoint")
       template(slot-scope="scope")
         a(:href="scope.row.endpoint" target="_blank")
@@ -45,6 +45,14 @@ export default {
       if (res.data.code === 200) {
         const res = await this.$axios.get("http://localhost:8080/storage");
         this.storageList = res.data.data;
+      }
+    },
+    getSizeString(size) {
+      const sizeMi = size / 1024 / 1024;
+      if (sizeMi < 1000) {
+        return Math.round(sizeMi * 100) / 100 + "Mi";
+      } else {
+        return Math.round((sizeMi / 1024) * 100) / 100 + "Gi";
       }
     }
   }
