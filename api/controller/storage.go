@@ -41,11 +41,11 @@ func CreateStorage(c *gin.Context) {
 		return
 	}
 	storage.ReleaseName = releaseName
-	if err := json.Unmarshal(resource, &storage.Resource); err != nil {
+	if err := json.Unmarshal(resource, &storage.Resources); err != nil {
 		panic(err)
 	}
-	storage.Status = rancherApi.GetWorkloadStatus(storage.ReleaseName, storage.Type)
-	storage.Endpoint = rancherApi.GetServiceEndpoint(storage.ReleaseName, storage.Type)
+	rancherApi.GetWorkloadStatus(&storage)
+	rancherApi.GetServiceEndpoint(&storage)
 	mongo.InsertStorage(&storage)
 	c.JSON(http.StatusCreated, gin.H{
 		"code":    http.StatusCreated,
@@ -57,9 +57,10 @@ func CreateStorage(c *gin.Context) {
 func ListStorage(c *gin.Context) {
 	storageList := mongo.ListStorage()
 	for _, storage := range *storageList {
-		storage.Status = rancherApi.GetWorkloadStatus(storage.ReleaseName, storage.Type)
-		storage.VolumeID, storage.VolumeCapacity, storage.VolumeSize = rancherApi.GetPVCStatus(storage.ReleaseName, storage.Type)
-		if err := json.Unmarshal(helm.GetStorage(storage.ReleaseName), &storage.Resource); err != nil {
+		rancherApi.GetWorkloadStatus(&storage)
+		rancherApi.GetServiceEndpoint(&storage)
+		rancherApi.GetPVCStatus(&storage)
+		if err := json.Unmarshal(helm.GetStorage(storage.ReleaseName), &storage.Resources); err != nil {
 			panic(err)
 		}
 		mongo.UpdateStorage(&storage)
@@ -75,11 +76,12 @@ func ListStorage(c *gin.Context) {
 func GetStorage(c *gin.Context) {
 	releaseName := c.Param("releaseName")
 	storage := mongo.GetStorage(releaseName)
-	storage.VolumeID, storage.VolumeCapacity, storage.VolumeSize = rancherApi.GetPVCStatus(storage.ReleaseName, storage.Type)
-	if err := json.Unmarshal(helm.GetStorage(storage.ReleaseName), &storage.Resource); err != nil {
+	rancherApi.GetWorkloadStatus(storage)
+	rancherApi.GetServiceEndpoint(storage)
+	rancherApi.GetPVCStatus(storage)
+	if err := json.Unmarshal(helm.GetStorage(storage.ReleaseName), &storage.Resources); err != nil {
 		panic(err)
 	}
-	storage.Status = rancherApi.GetWorkloadStatus(storage.ReleaseName, storage.Type)
 	mongo.UpdateStorage(storage)
 	c.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
