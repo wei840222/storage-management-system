@@ -41,6 +41,10 @@ export default {
         config: this.form
       });
       if (res.data.code === 201) {
+        res.data.data.persistentVolumeClaim = {
+          size: 0,
+          capacity: 0
+        };
         this.$store.commit("add2storageList", res.data.data);
       }
       this.dialogFormVisible = false;

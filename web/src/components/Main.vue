@@ -1,18 +1,18 @@
 <template lang="pug">
   el-table(:data="$store.state.storageList")
     el-table-column(type="index" width="50")
-    el-table-column(label="ID" prop="id" sortable)
-    el-table-column(label="ReleaseName" prop="releaseName" sortable)
-    el-table-column(label="Type" prop="type" sortable)
-    el-table-column(label="Size/Capacity" prop="volumeSize" sortable)
+    el-table-column(label="ID" width="220" prop="id" sortable)
+    el-table-column(label="ReleaseName" width="150" prop="releaseName" sortable)
+    el-table-column(label="Type" width="80" prop="type" sortable)
+    el-table-column(label="Size/Capacity" prop="persistentVolumeClaim.size" sortable)
       template(slot-scope="scope")
-        el-popover(placement="top-start" width="150" trigger="hover" :content="getSizeString(scope.row.volumeSize) + '/' +scope.row.volumeCapacity")
-          el-progress(slot="reference" :text-inside="true" :stroke-width="18" color="#8e71c7" :percentage="Math.ceil(scope.row.volumeSize / (Number(scope.row.volumeCapacity.split('Gi')[0])*1024*1024*1024) * 100)")
-    el-table-column(label="Endpoint" prop="endpoint")
+        el-popover(placement="top-start" trigger="hover" :content="getSizeString(scope.row.persistentVolumeClaim.size)+'/'+getSizeString(scope.row.persistentVolumeClaim.capacity)")
+          el-progress(slot="reference" :text-inside="true" :stroke-width="18" color="#8e71c7" :percentage="Math.round(scope.row.persistentVolumeClaim.size/scope.row.persistentVolumeClaim.capacity*100)")
+    el-table-column(label="Endpoint" prop="endpoint.port")
       template(slot-scope="scope")
-        a(:href="scope.row.endpoint" target="_blank")
-          el-tag(size="mini" type="primary") {{ scope.row.endpoint }}
-    el-table-column(label="Status" prop="status")
+        a(:href="`http://${scope.row.endpoint.host}:${scope.row.endpoint.port}`" target="_blank")
+          el-tag(size="mini" type="primary") http://{{ scope.row.endpoint.host }}:{{ scope.row.endpoint.port }}
+    el-table-column(label="Status" width="110" prop="status")
       template(slot-scope="scope")
         el-tag(:type="scope.row.status === 'active' ? 'success' : 'warning'" disable-transitions) {{ scope.row.status }}
     el-table-column(label="Operation")
@@ -26,7 +26,7 @@ export default {
   name: "main",
   async mounted() {
     await this.$store.dispatch("getStorageList");
-    setInterval(() => this.$store.dispatch("updateStorageList"), 5000);
+    setInterval(() => this.$store.dispatch("updateStorageList"), 10000);
   },
   methods: {
     async deleteStorage(data) {
