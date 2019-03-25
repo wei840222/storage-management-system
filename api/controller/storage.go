@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"go-helm-rest/model"
 	"go-helm-rest/service"
 	"net/http"
@@ -30,7 +31,7 @@ func CreateStorage(c *gin.Context) {
 		return
 	}
 	storage.ID = bson.NewObjectId()
-	releaseName, err := helm.CreateStorage(&storage)
+	releaseName, resource, err := helm.CreateStorage(&storage)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
@@ -40,6 +41,9 @@ func CreateStorage(c *gin.Context) {
 		return
 	}
 	storage.ReleaseName = releaseName
+	if err := json.Unmarshal(resource, &storage.Resource); err != nil {
+		panic(err)
+	}
 	storage.Status = rancherApi.GetWorkloadStatus(storage.ReleaseName, storage.Type)
 	storage.Endpoint = rancherApi.GetServiceEndpoint(storage.ReleaseName, storage.Type)
 	mongo.InsertStorage(&storage)
@@ -54,10 +58,13 @@ func ListStorage(c *gin.Context) {
 	storageList := mongo.ListStorage()
 	for _, storage := range *storageList {
 		storage.Status = rancherApi.GetWorkloadStatus(storage.ReleaseName, storage.Type)
+		if err := json.Unmarshal(helm.GetStorage(storage.ReleaseName), &storage.Resource); err != nil {
+			panic(err)
+		}
 		mongo.UpdateStorage(&storage)
 	}
 	storageList = mongo.ListStorage()
-	c.JSON(http.StatusCreated, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
 		"message": "List Storage Success",
 		"data":    storageList,
@@ -67,9 +74,12 @@ func ListStorage(c *gin.Context) {
 func GetStorage(c *gin.Context) {
 	releaseName := c.Param("releaseName")
 	storage := mongo.GetStorage(releaseName)
+	if err := json.Unmarshal(helm.GetStorage(storage.ReleaseName), &storage.Resource); err != nil {
+		panic(err)
+	}
 	storage.Status = rancherApi.GetWorkloadStatus(storage.ReleaseName, storage.Type)
 	mongo.UpdateStorage(storage)
-	c.JSON(http.StatusCreated, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
 		"message": "Get Storage Success",
 		"data":    storage,
@@ -80,7 +90,7 @@ func DeleteStorage(c *gin.Context) {
 	releaseName := c.Param("releaseName")
 	helm.DeleteStorage(releaseName)
 	mongo.DeleteStorage(releaseName)
-	c.JSON(http.StatusCreated, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
 		"message": "Delete Storage Success",
 	})

@@ -10,6 +10,8 @@ services:
         build: ./api
         ports:
             - 8080:8080
+        environment:
+            - MONGO_URL=mongodb://mongodb:27017
         depends_on:
             - mongodb
     mongodb:
@@ -21,7 +23,7 @@ services:
     api-doc:
         image: redocly/redoc
         ports:
-            - 3000:3000
+            - 3000:80
         environment:
             - SPEC_URL=openapi.yaml
         volumes:

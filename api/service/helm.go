@@ -13,7 +13,7 @@ import (
 
 type Helm struct{}
 
-func (h *Helm) CreateStorage(storage *model.Storage) (string, error) {
+func (h *Helm) CreateStorage(storage *model.Storage) (string, []byte, error) {
 	cmd := "helm json install --set "
 	for key := range storage.Config {
 		cmd += key + "=" + storage.Config[key] + ","
@@ -25,11 +25,24 @@ func (h *Helm) CreateStorage(storage *model.Storage) (string, error) {
 		panic(err)
 	}
 	if strings.Contains(string(stdout), "Error") {
-		return "", errors.New(string(stdout))
+		return "", nil, errors.New(string(stdout))
 	}
 	releaseName := gjson.Get(string(stdout), "releaseName").String()
-	log.Printf("CreateStorage releaseName: %s", releaseName)
-	return releaseName, nil
+	resource := gjson.Get(string(stdout), "resources").String()
+	log.Printf("CreateStorage releaseInfo: %s", stdout)
+	return releaseName, []byte(resource), nil
+}
+
+func (h *Helm) GetStorage(realseName string) []byte {
+	cmd := "helm json status " + realseName
+	log.Printf("GetStorage cmd: %s", cmd)
+	stdout, err := exec.Command("bash", "-c", cmd).CombinedOutput()
+	if err != nil {
+		panic(err)
+	}
+	log.Printf("GetStorage %s", stdout)
+	resource := gjson.Get(string(stdout), "resources").String()
+	return []byte(resource)
 }
 
 func (h *Helm) DeleteStorage(realseName string) {
