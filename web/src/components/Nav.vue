@@ -35,13 +35,16 @@ export default {
   },
   methods: {
     async createMinio() {
-      this.creating = true
+      this.creating = true;
       const res = await this.$axios.post("http://localhost:8080/storage", {
         type: "minio",
         config: this.form
       });
-      this.dialogFormVisible = false
-      this.creating = false
+      if (res.data.code === 201) {
+        this.$store.commit("add2storageList", res.data.data);
+      }
+      this.dialogFormVisible = false;
+      this.creating = false;
     }
   }
 };
