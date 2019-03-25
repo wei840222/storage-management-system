@@ -58,6 +58,7 @@ func ListStorage(c *gin.Context) {
 	storageList := mongo.ListStorage()
 	for _, storage := range *storageList {
 		storage.Status = rancherApi.GetWorkloadStatus(storage.ReleaseName, storage.Type)
+		storage.VolumeID, storage.VolumeCapacity, storage.VolumeSize = rancherApi.GetPVCStatus(storage.ReleaseName, storage.Type)
 		if err := json.Unmarshal(helm.GetStorage(storage.ReleaseName), &storage.Resource); err != nil {
 			panic(err)
 		}
@@ -74,6 +75,7 @@ func ListStorage(c *gin.Context) {
 func GetStorage(c *gin.Context) {
 	releaseName := c.Param("releaseName")
 	storage := mongo.GetStorage(releaseName)
+	storage.VolumeID, storage.VolumeCapacity, storage.VolumeSize = rancherApi.GetPVCStatus(storage.ReleaseName, storage.Type)
 	if err := json.Unmarshal(helm.GetStorage(storage.ReleaseName), &storage.Resource); err != nil {
 		panic(err)
 	}

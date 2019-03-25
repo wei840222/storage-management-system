@@ -40,7 +40,7 @@ func (h *Helm) GetStorage(realseName string) []byte {
 	if err != nil {
 		panic(err)
 	}
-	log.Printf("GetStorage %s", stdout)
+	// log.Printf("GetStorage %s", stdout)
 	resource := gjson.Get(string(stdout), "resources").String()
 	return []byte(resource)
 }
