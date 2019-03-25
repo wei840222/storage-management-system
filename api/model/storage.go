@@ -11,6 +11,6 @@ type Storage struct {
 	Endpoint       string            `json:"endpoint" bson:"endpoint"`
 	Status         string            `json:"status" bson:"status"`
 	VolumeID       string            `json:"volumeId" bson:"volumeId"`
-	VolumeCapacity string            `json:"volumeCapacity" bson:"volumeCapacity"`
+	VolumeCapacity int64            `json:"volumeCapacity" bson:"volumeCapacity"`
 	VolumeSize     int64             `json:"volumeSize" bson:"volumeSize"`
 }

@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/tidwall/gjson"
 )
@@ -44,7 +46,7 @@ func (r *RancherApi) GetWorkloadStatus(releaseName string, storageType string) s
 	return status
 }
 
-func (r *RancherApi) GetPVCStatus(releaseName string, storageType string) (string, string, int64) {
+func (r *RancherApi) GetPVCStatus(releaseName string, storageType string) (string, int64, int64) {
 	url := config.RancherApiUrl + "/" + config.PVCApiPath + "/" + config.DeployNameSpace + ":" + releaseName + "-" + storageType
 	req, err := http.NewRequest("GET", url, nil)
 	req.Header.Add("Authorization", "Bearer "+config.ApiToken)
@@ -55,10 +57,14 @@ func (r *RancherApi) GetPVCStatus(releaseName string, storageType string) (strin
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 	// log.Printf("GetPVCStatus %s", string(body))
-	volumeId := gjson.Get(string(body), "volumeId").String()
-	volumeCapacity := gjson.Get(string(body), "status.capacity.storage").String()
-
-	url = config.LonghornApiUrl + "/" + volumeId + "?action=snapshotList"
+	volumeID := gjson.Get(string(body), "volumeId").String()
+	volumeCapacityStr := strings.Split(gjson.Get(string(body), "status.capacity.storage").String(), "Gi")[0]
+	volumeCapacity, err := strconv.ParseInt(volumeCapacityStr, 10, 64)
+	if err != nil {
+		panic(err)
+	}
+	volumeCapacity *= 1024 * 1024 * 1024
+	url = config.LonghornApiUrl + "/" + volumeID + "?action=snapshotList"
 	req, err = http.NewRequest("POST", url, nil)
 	req.Header.Add("Authorization", "Bearer "+config.ApiToken)
 	resp, err = client.Do(req)
@@ -68,6 +74,6 @@ func (r *RancherApi) GetPVCStatus(releaseName string, storageType string) (strin
 	body, _ = ioutil.ReadAll(resp.Body)
 	// log.Printf("GetVolStatus %s", string(body))
 	volumeSize := gjson.Get(string(body), "data.0.size").Int()
-	log.Printf("GetPVCStatus %s, %s, %d", volumeId, volumeCapacity, volumeSize)
-	return volumeId, volumeCapacity, volumeSize
+	log.Printf("GetPVCStatus %s, %d, %d", volumeID, volumeCapacity, volumeSize)
+	return volumeID, volumeCapacity, volumeSize
 }
