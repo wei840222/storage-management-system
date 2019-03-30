@@ -1,26 +1,33 @@
 package main
 
 import (
-	"go-helm-rest/config"
-	"go-helm-rest/controller"
-	"go-helm-rest/service"
+	"storage-management-system/config"
+	"storage-management-system/controller"
+	"storage-management-system/service"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
+	"go.uber.org/dig"
 )
 
 func main() {
-	config := config.New()
-	helmService := service.NewHelmService(config)
-	rancherApiService := service.NewRancherApiService(config)
-	mongoService := service.NewMongoService(config)
-	defer mongoService.CloseSession()
-	controller := controller.NewStorageController(helmService, mongoService, rancherApiService)
-	r := gin.Default()
-	r.Use(cors.Default())
-	r.POST("/storage", controller.CreateStorage)
-	r.GET("/storage", controller.ListStorage)
-	r.GET("/storage/:releaseName", controller.GetStorage)
-	r.DELETE("/storage/:releaseName", controller.DeleteStorage)
-	r.Run(":8080")
+	c := dig.New()
+	c.Provide(config.New)
+	c.Provide(service.NewHelmService)
+	c.Provide(service.NewRancherApiService)
+	c.Provide(service.NewMongoService)
+	c.Provide(controller.NewStorageController)
+	if err := c.Invoke(func(mongoService *service.MongoService, storageController *controller.StorageController) {
+		defer mongoService.CloseSession()
+		r := gin.Default()
+		r.Use(cors.Default())
+		r.POST("/storage", storageController.CreateStorage)
+		r.GET("/storage", storageController.ListStorage)
+		r.GET("/storage/:releaseName", storageController.GetStorage)
+		r.DELETE("/storage/:releaseName", storageController.DeleteStorage)
+		r.Run(":8080")
+	}); err != nil {
+		panic(err)
+	}
 }

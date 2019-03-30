@@ -2,8 +2,8 @@ package service
 
 import (
 	"errors"
-	"go-helm-rest/config"
-	"go-helm-rest/model"
+	"storage-management-system/config"
+	"storage-management-system/model"
 	"log"
 	"os/exec"
 	"strings"

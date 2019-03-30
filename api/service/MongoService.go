@@ -1,8 +1,8 @@
 package service
 
 import (
-	"go-helm-rest/config"
-	"go-helm-rest/model"
+	"storage-management-system/config"
+	"storage-management-system/model"
 
 	"github.com/globalsign/mgo"
 	"go.mongodb.org/mongo-driver/bson"

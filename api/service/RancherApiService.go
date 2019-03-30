@@ -2,8 +2,8 @@ package service
 
 import (
 	"fmt"
-	"go-helm-rest/config"
-	"go-helm-rest/model"
+	"storage-management-system/config"
+	"storage-management-system/model"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -55,7 +55,6 @@ func (r *RancherApiService) GetServiceEndpoint(storage *model.Storage) {
 
 func (r *RancherApiService) GetPVCStatus(storage *model.Storage) {
 	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/%s:%s", r.config.RancherApiUrl, "persistentVolumeClaims", r.config.DeployNamespace, storage.GetResourceName("v1/PersistentVolumeClaim")))
-	log.Print(string(body))
 	storage.PersistentVolumeClaim = make(map[string]interface{})
 	storage.PersistentVolumeClaim["id"] = gjson.Get(string(body), "volumeId").String()
 	volumeCapacityStr := strings.Split(gjson.Get(string(body), "status.capacity.storage").String(), "Gi")[0]

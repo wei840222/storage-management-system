@@ -2,8 +2,8 @@ package controller
 
 import (
 	"encoding/json"
-	"go-helm-rest/model"
-	"go-helm-rest/service"
+	"storage-management-system/model"
+	"storage-management-system/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
