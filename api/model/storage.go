@@ -7,8 +7,8 @@ import (
 type Storage struct {
 	ID                    bson.ObjectId            `json:"id" bson:"_id,omitempty"`
 	ReleaseName           string                   `json:"releaseName" bson:"releaseName"`
+	ChartName             string                   `json:"chartName" binding:"required" bson:"chartName"`
 	Resources             []map[string]interface{} `json:"resources" bson:"resources"`
-	Type                  string                   `json:"type" binding:"required" bson:"type"`
 	Config                map[string]string        `json:"config" binding:"required" bson:"config"`
 	Endpoint              map[string]interface{}   `json:"endpoint" bson:"endpoint"`
 	Status                string                   `json:"status" bson:"status"`

@@ -13,14 +13,20 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-type RancherApi struct{}
+type RancherApiService struct {
+	config *config.Config
+}
 
-func (r *RancherApi) doApiRequest(method string, url string) []byte {
+func NewRancherApiService(c *config.Config) *RancherApiService {
+	return &RancherApiService{c}
+}
+
+func (r *RancherApiService) doApiRequest(method string, url string) []byte {
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
 		panic(err)
 	}
-	req.Header.Add("Authorization", "Bearer "+config.ApiToken)
+	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", r.config.RancherApiToken))
 	client := &http.Client{}
 	res, err := client.Do(req)
 	if err != nil {
@@ -33,22 +39,23 @@ func (r *RancherApi) doApiRequest(method string, url string) []byte {
 	return body
 }
 
-func (r *RancherApi) GetWorkloadStatus(storage *model.Storage) {
-	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/deployment:%s:%s", config.RancherApiUrl, config.WorkloadApiPath, config.DeployNameSpace, storage.GetResourceName("v1beta2/Deployment")))
+func (r *RancherApiService) GetWorkloadStatus(storage *model.Storage) {
+	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/deployment:%s:%s", r.config.RancherApiUrl, "workloads", r.config.DeployNamespace, storage.GetResourceName("v1beta2/Deployment")))
 	storage.Status = gjson.Get(string(body), "state").String()
 	log.Printf("GetWorkloadStatus Status:%s", storage.Status)
 }
 
-func (r *RancherApi) GetServiceEndpoint(storage *model.Storage) {
-	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/%s:%s", config.RancherApiUrl, config.ServiceApiPath, config.DeployNameSpace, storage.GetResourceName("v1/Service")))
+func (r *RancherApiService) GetServiceEndpoint(storage *model.Storage) {
+	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/%s:%s", r.config.RancherApiUrl, "services", r.config.DeployNamespace, storage.GetResourceName("v1/Service")))
 	storage.Endpoint = make(map[string]interface{})
 	storage.Endpoint["host"] = gjson.Get(string(body), "publicEndpoints.0.addresses.0").String()
 	storage.Endpoint["port"] = gjson.Get(string(body), "publicEndpoints.0.port").Int()
 	log.Printf("GetServiceEndpoint Host:%s, Port:%d", storage.Endpoint["host"], storage.Endpoint["port"])
 }
 
-func (r *RancherApi) GetPVCStatus(storage *model.Storage) {
-	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/%s:%s", config.RancherApiUrl, config.PVCApiPath, config.DeployNameSpace, storage.GetResourceName("v1/PersistentVolumeClaim")))
+func (r *RancherApiService) GetPVCStatus(storage *model.Storage) {
+	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/%s:%s", r.config.RancherApiUrl, "persistentVolumeClaims", r.config.DeployNamespace, storage.GetResourceName("v1/PersistentVolumeClaim")))
+	log.Print(string(body))
 	storage.PersistentVolumeClaim = make(map[string]interface{})
 	storage.PersistentVolumeClaim["id"] = gjson.Get(string(body), "volumeId").String()
 	volumeCapacityStr := strings.Split(gjson.Get(string(body), "status.capacity.storage").String(), "Gi")[0]
@@ -57,7 +64,7 @@ func (r *RancherApi) GetPVCStatus(storage *model.Storage) {
 		panic(err)
 	}
 	storage.PersistentVolumeClaim["capacity"] = volumeCapacity * 1024 * 1024 * 1024
-	body = r.doApiRequest("POST", fmt.Sprintf("%s/%s?action=snapshotList", config.LonghornApiUrl, storage.PersistentVolumeClaim["id"]))
+	body = r.doApiRequest("POST", fmt.Sprintf("%s/%s?action=snapshotList", r.config.LonghornApiUrl, storage.PersistentVolumeClaim["id"]))
 	storage.PersistentVolumeClaim["size"] = gjson.Get(string(body), "data.0.size").Int()
 	log.Printf("GetPVCStatus ID:%s, Capacity:%d, Size:%d", storage.PersistentVolumeClaim["id"], storage.PersistentVolumeClaim["capacity"], storage.PersistentVolumeClaim["size"])
 }
