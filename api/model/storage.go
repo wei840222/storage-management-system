@@ -1,6 +1,8 @@
 package model
 
 import (
+	"strings"
+
 	"github.com/globalsign/mgo/bson"
 )
 
@@ -18,7 +20,7 @@ type Storage struct {
 func (s *Storage) GetResourceName(resourceType string) string {
 	var resource map[string]interface{}
 	for _, r := range s.Resources {
-		if r["name"] == resourceType {
+		if strings.Contains(r["name"].(string), resourceType) {
 			resource = r
 		}
 	}

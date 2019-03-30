@@ -2,9 +2,9 @@ package controller
 
 import (
 	"encoding/json"
+	"net/http"
 	"storage-management-system/model"
 	"storage-management-system/service"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/globalsign/mgo/bson"
@@ -48,7 +48,7 @@ func (s *StorageController) CreateStorage(c *gin.Context) {
 	if err := json.Unmarshal(resource, &storage.Resources); err != nil {
 		panic(err)
 	}
-	s.rancherApiService.GetWorkloadStatus(&storage)
+	s.rancherApiService.GetPodStatus(&storage)
 	s.rancherApiService.GetServiceEndpoint(&storage)
 	s.mongoService.InsertStorage(&storage)
 	s.returnJSON(c, http.StatusCreated, storage)
@@ -57,7 +57,7 @@ func (s *StorageController) CreateStorage(c *gin.Context) {
 func (s *StorageController) ListStorage(c *gin.Context) {
 	storageList := s.mongoService.ListStorage()
 	for _, storage := range *storageList {
-		s.rancherApiService.GetWorkloadStatus(&storage)
+		s.rancherApiService.GetPodStatus(&storage)
 		s.rancherApiService.GetServiceEndpoint(&storage)
 		s.rancherApiService.GetPVCStatus(&storage)
 		if err := json.Unmarshal(s.helmService.GetStorage(storage.ReleaseName), &storage.Resources); err != nil {
@@ -72,7 +72,7 @@ func (s *StorageController) ListStorage(c *gin.Context) {
 func (s *StorageController) GetStorage(c *gin.Context) {
 	releaseName := c.Param("releaseName")
 	storage := s.mongoService.GetStorage(releaseName)
-	s.rancherApiService.GetWorkloadStatus(storage)
+	s.rancherApiService.GetPodStatus(storage)
 	s.rancherApiService.GetServiceEndpoint(storage)
 	s.rancherApiService.GetPVCStatus(storage)
 	if err := json.Unmarshal(s.helmService.GetStorage(storage.ReleaseName), &storage.Resources); err != nil {

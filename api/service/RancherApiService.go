@@ -2,11 +2,11 @@ package service
 
 import (
 	"fmt"
-	"storage-management-system/config"
-	"storage-management-system/model"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"storage-management-system/config"
+	"storage-management-system/model"
 	"strconv"
 	"strings"
 
@@ -39,14 +39,14 @@ func (r *RancherApiService) doApiRequest(method string, url string) []byte {
 	return body
 }
 
-func (r *RancherApiService) GetWorkloadStatus(storage *model.Storage) {
-	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/deployment:%s:%s", r.config.RancherApiUrl, "workloads", r.config.DeployNamespace, storage.GetResourceName("v1beta2/Deployment")))
+func (r *RancherApiService) GetPodStatus(storage *model.Storage) {
+	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/%s:%s", r.config.RancherApiUrl, "pods", r.config.DeployNamespace, storage.GetResourceName("Pod")))
 	storage.Status = gjson.Get(string(body), "state").String()
-	log.Printf("GetWorkloadStatus Status:%s", storage.Status)
+	log.Printf("GetPodStatus Status:%s", storage.Status)
 }
 
 func (r *RancherApiService) GetServiceEndpoint(storage *model.Storage) {
-	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/%s:%s", r.config.RancherApiUrl, "services", r.config.DeployNamespace, storage.GetResourceName("v1/Service")))
+	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/%s:%s", r.config.RancherApiUrl, "services", r.config.DeployNamespace, storage.GetResourceName("Service")))
 	storage.Endpoint = make(map[string]interface{})
 	storage.Endpoint["host"] = gjson.Get(string(body), "publicEndpoints.0.addresses.0").String()
 	storage.Endpoint["port"] = gjson.Get(string(body), "publicEndpoints.0.port").Int()
@@ -54,13 +54,14 @@ func (r *RancherApiService) GetServiceEndpoint(storage *model.Storage) {
 }
 
 func (r *RancherApiService) GetPVCStatus(storage *model.Storage) {
-	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/%s:%s", r.config.RancherApiUrl, "persistentVolumeClaims", r.config.DeployNamespace, storage.GetResourceName("v1/PersistentVolumeClaim")))
+	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/%s:%s", r.config.RancherApiUrl, "persistentVolumeClaims", r.config.DeployNamespace, storage.GetResourceName("PersistentVolumeClaim")))
 	storage.PersistentVolumeClaim = make(map[string]interface{})
 	storage.PersistentVolumeClaim["id"] = gjson.Get(string(body), "volumeId").String()
 	volumeCapacityStr := strings.Split(gjson.Get(string(body), "status.capacity.storage").String(), "Gi")[0]
 	volumeCapacity, err := strconv.ParseInt(volumeCapacityStr, 10, 64)
 	if err != nil {
-		panic(err)
+		log.Print(err)
+		volumeCapacity = 0
 	}
 	storage.PersistentVolumeClaim["capacity"] = volumeCapacity * 1024 * 1024 * 1024
 	body = r.doApiRequest("POST", fmt.Sprintf("%s/%s?action=snapshotList", r.config.LonghornApiUrl, storage.PersistentVolumeClaim["id"]))
