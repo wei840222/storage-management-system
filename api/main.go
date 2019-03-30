@@ -17,9 +17,12 @@ func main() {
 	c.Provide(service.NewHelmService)
 	c.Provide(service.NewRancherApiService)
 	c.Provide(service.NewMongoService)
+	c.Provide(service.NewCronService)
 	c.Provide(controller.NewStorageController)
-	if err := c.Invoke(func(mongoService *service.MongoService, storageController *controller.StorageController) {
+	if err := c.Invoke(func(mongoService *service.MongoService, cronService *service.CronService, storageController *controller.StorageController) {
 		defer mongoService.CloseSession()
+		cronService.Strat()
+		defer cronService.Stop()
 		r := gin.Default()
 		r.Use(cors.Default())
 		r.POST("/storage", storageController.CreateStorage)

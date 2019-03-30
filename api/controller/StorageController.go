@@ -56,29 +56,12 @@ func (s *StorageController) CreateStorage(c *gin.Context) {
 
 func (s *StorageController) ListStorage(c *gin.Context) {
 	storageList := s.mongoService.ListStorage()
-	for _, storage := range *storageList {
-		s.rancherApiService.GetPodStatus(&storage)
-		s.rancherApiService.GetServiceEndpoint(&storage)
-		s.rancherApiService.GetPVCStatus(&storage)
-		if err := json.Unmarshal(s.helmService.GetStorage(storage.ReleaseName), &storage.Resources); err != nil {
-			panic(err)
-		}
-		s.mongoService.UpdateStorage(&storage)
-	}
-	storageList = s.mongoService.ListStorage()
 	s.returnJSON(c, http.StatusOK, storageList)
 }
 
 func (s *StorageController) GetStorage(c *gin.Context) {
 	releaseName := c.Param("releaseName")
 	storage := s.mongoService.GetStorage(releaseName)
-	s.rancherApiService.GetPodStatus(storage)
-	s.rancherApiService.GetServiceEndpoint(storage)
-	s.rancherApiService.GetPVCStatus(storage)
-	if err := json.Unmarshal(s.helmService.GetStorage(storage.ReleaseName), &storage.Resources); err != nil {
-		panic(err)
-	}
-	s.mongoService.UpdateStorage(storage)
 	s.returnJSON(c, http.StatusOK, storage)
 }
 
