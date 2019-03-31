@@ -12,6 +12,7 @@ services:
             - 5001:8080
         environment:
             - MONGO_URL=mongodb://mongodb:27017
+            - DEPLOY_NAMESPACE=storage-management-system-dev
         depends_on:
             - mongodb
     mongodb:
