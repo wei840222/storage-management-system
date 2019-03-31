@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-menu.el-menu-demo(default-active="1" mode="horizontal")
+  el-menu.el-menu-demo(:default-active="1" mode="horizontal")
     el-submenu(index="1")
       template(slot="title") New
       el-menu-item(index="minio" @click="minio.dialogFormVisible = true") minio
@@ -72,15 +72,16 @@ export default {
         creating: false,
         chartName: "stable/mysql",
         config: {
-          mysqlUser: "aclab",
-          mysqlPassword: "csie1226",
+          mysqlUser: "",
+          mysqlPassword: "",
           mysqlDatabase: "database",
           "persistence.size": "2G",
           "service.type": "NodePort",
           "service.nodePort": "",
           "resources.limits.memory": "512Mi"
         }
-      },mongodb: {
+      },
+      mongodb: {
         dialogFormVisible: false,
         creating: false,
         chartName: "stable/mongodb",
@@ -105,8 +106,13 @@ export default {
           size: 0,
           capacity: 0
         };
-        this.$store.dispatch("getStorageList")
+        this.$store.dispatch("getStorageList");
       }
+      this.$notify({
+        title: "Created",
+        message: `Create ${data.chartName.split("/")[1]} success!`,
+        type: "success"
+      });
       data.dialogFormVisible = false;
       data.creating = false;
     }

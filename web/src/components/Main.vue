@@ -39,14 +39,18 @@ export default {
       );
       if (res.data.code === 200) {
         await this.$store.dispatch("getStorageList");
+        this.$notify({
+          title: "Deleted",
+          message: `Delete ${data.chartName.split("/")[1]} success!`,
+          type: "success"
+        });
       }
     },
     getSizeString(size) {
       const sizeMi = size / 1024 / 1024;
       if (isNaN(size)) {
         return 0 + "Mi";
-      }
-      else if (sizeMi < 1000) {
+      } else if (sizeMi < 1000) {
         return Math.round(sizeMi * 100) / 100 + "Mi";
       } else {
         return Math.round((sizeMi / 1024) * 100) / 100 + "Gi";
