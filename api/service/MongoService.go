@@ -18,7 +18,7 @@ func NewMongoService(c *config.Config) *MongoService {
 	if err != nil {
 		panic(err)
 	}
-	collection := session.DB("StorageManageSystem").C("Storage")
+	collection := session.DB("database").C("Storage")
 	return &MongoService{session, collection}
 }
 
