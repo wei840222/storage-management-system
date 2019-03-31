@@ -32,16 +32,21 @@ func (r *RancherApiService) doApiRequest(method string, url string) []byte {
 	if err != nil {
 		panic(err)
 	}
+	defer res.Body.Close()
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		panic(err)
 	}
+	log.Printf("code:%d, body:%s", res.StatusCode, string(body))
 	return body
 }
 
 func (r *RancherApiService) GetPodStatus(storage *model.Storage) {
 	body := r.doApiRequest("GET", fmt.Sprintf("%s/%s/%s:%s", r.config.RancherApiUrl, "pods", r.config.DeployNamespace, storage.GetResourceName("Pod")))
 	storage.Status = gjson.Get(string(body), "state").String()
+	if storage.Status == "" {
+		storage.Status = "N/A"
+	}
 	log.Printf("GetPodStatus Status:%s", storage.Status)
 }
 
