@@ -49,7 +49,7 @@ export default {
     async deleteStorage(data) {
       data.status = "deleting";
       const res = await this.$axios.delete(
-        `http://localhost:8080/storage/${data.releaseName}`
+        `/storage/${data.releaseName}`
       );
       if (res.data.code === 200) {
         await this.$store.dispatch("getStorageList");

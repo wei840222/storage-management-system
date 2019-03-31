@@ -1,5 +1,5 @@
 <template lang="pug">
-  el-menu.el-menu-demo(:default-active="1" mode="horizontal")
+  el-menu.el-menu-demo(default-active="1" mode="horizontal")
     el-submenu(index="1")
       template(slot="title") New
       el-menu-item(index="minio" @click="minio.dialogFormVisible = true") minio
@@ -100,7 +100,7 @@ export default {
   methods: {
     async create(data) {
       data.creating = true;
-      const res = await this.$axios.post("http://localhost:8080/storage", data);
+      const res = await this.$axios.post("/storage", data);
       if (res.data.code === 201) {
         res.data.data.persistentVolumeClaim = {
           size: 0,

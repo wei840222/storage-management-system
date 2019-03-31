@@ -14,7 +14,7 @@ export default new Vuex.Store({
   },
   actions: {
     async getStorageList(context) {
-      const res = await Vue.axios.get("http://localhost:8080/storage");
+      const res = await Vue.axios.get("/storage");
       context.commit('storageList', res.data.data)
     }
   }
