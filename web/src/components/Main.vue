@@ -20,13 +20,27 @@
         el-tag(:type="scope.row.status === 'running' ? 'success' : 'warning'" disable-transitions) {{ scope.row.status }}
     el-table-column(label="Operation")
       template(slot-scope="scope")
-        el-button(size="mini" type="primary") Monit
+        el-button(size="mini" type="primary" @click="showMonitor(scope.row)") Monit
         el-button(size="mini" type="danger" :loading="scope.row.status === 'deleting'" @click="deleteStorage(scope.row)") Delete
+        el-dialog(:visible.sync="monitorShow" :fullscreen="true" @close="closeMonitor")
+          iframe(:src="prometheusUrl.cpu" width="100%" height="180" frameborder="0")
+          iframe(:src="prometheusUrl.memory" width="100%" height="180" frameborder="0")
+          iframe(:src="prometheusUrl.network" width="100%" height="180" frameborder="0")
 </template>
 
 <script>
 export default {
   name: "main",
+  data() {
+    return {
+      monitorShow: false,
+      prometheusUrl: {
+        cpu: "",
+        memory: "",
+        network: ""
+      }
+    };
+  },
   async mounted() {
     await this.$store.dispatch("getStorageList");
     setInterval(() => this.$store.dispatch("getStorageList"), 10000);
@@ -60,6 +74,19 @@ export default {
       if (isNaN(size / capacity) || capacity < size) {
         return 0;
       } else return Math.round((size / capacity) * 100);
+    },
+    showMonitor(data) {
+      this.prometheusUrl.cpu = data.prometheusUrl.CPU;
+      this.prometheusUrl.memory = data.prometheusUrl.Memory;
+      this.prometheusUrl.network = data.prometheusUrl.Network;
+      this.monitorShow = true;
+    },
+    closeMonitor() {
+      this.prometheusUrl = {
+        cpu: "",
+        memory: "",
+        network: ""
+      };
     }
   }
 };

@@ -50,6 +50,7 @@ func (s *StorageController) CreateStorage(c *gin.Context) {
 	}
 	s.rancherApiService.GetPodStatus(&storage)
 	s.rancherApiService.GetServiceEndpoint(&storage)
+	s.rancherApiService.GetPrometheusUrl(&storage)
 	s.mongoService.InsertStorage(&storage)
 	s.returnJSON(c, http.StatusCreated, storage)
 }

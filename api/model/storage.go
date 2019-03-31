@@ -15,6 +15,7 @@ type Storage struct {
 	Endpoint              map[string]interface{}   `json:"endpoint" bson:"endpoint"`
 	Status                string                   `json:"status" bson:"status"`
 	PersistentVolumeClaim map[string]interface{}   `json:"persistentVolumeClaim" bson:"persistentVolumeClaim"`
+	PrometheusURL         map[string]string        `json:"prometheusUrl" bson:"prometheusUrl"`
 }
 
 func (s *Storage) GetResourceName(resourceType string) string {
