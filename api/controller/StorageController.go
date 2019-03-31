@@ -67,6 +67,9 @@ func (s *StorageController) GetStorage(c *gin.Context) {
 
 func (s *StorageController) DeleteStorage(c *gin.Context) {
 	releaseName := c.Param("releaseName")
+	storage := s.mongoService.GetStorage(releaseName)
+	storage.Status = "deleting"
+	s.mongoService.UpdateStorage(storage)
 	s.helmService.DeleteStorage(releaseName)
 	s.mongoService.DeleteStorage(releaseName)
 	s.returnJSON(c, http.StatusOK, nil)

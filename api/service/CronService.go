@@ -29,6 +29,9 @@ func (c *CronService) Strat() {
 			if err := json.Unmarshal(c.helmService.GetStorage(storage.ReleaseName), &storage.Resources); err != nil {
 				panic(err)
 			}
+			if currStorage := c.mongoService.GetStorage(storage.ReleaseName); currStorage.Status == "deleting" {
+				continue
+			}
 			c.mongoService.UpdateStorage(&storage)
 		}
 		log.Print("Update all storage status")

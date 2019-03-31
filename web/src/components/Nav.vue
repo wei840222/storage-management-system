@@ -105,7 +105,7 @@ export default {
           size: 0,
           capacity: 0
         };
-        this.$store.commit("add2storageList", res.data.data);
+        this.$store.dispatch("getStorageList")
       }
       data.dialogFormVisible = false;
       data.creating = false;

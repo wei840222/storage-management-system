@@ -9,7 +9,7 @@
     el-table-column(label="Size/Capacity" prop="persistentVolumeClaim.size" sortable)
       template(slot-scope="scope")
         el-popover(placement="top-start" trigger="hover" :content="getSizeString(scope.row.persistentVolumeClaim.size)+'/'+getSizeString(scope.row.persistentVolumeClaim.capacity)")
-          el-progress(slot="reference" :text-inside="true" :stroke-width="18" color="#8e71c7" :percentage="Math.round(scope.row.persistentVolumeClaim.size/scope.row.persistentVolumeClaim.capacity*100)")
+          el-progress(slot="reference" :text-inside="true" :stroke-width="18" color="#8e71c7" :percentage="getPercentage(scope.row.persistentVolumeClaim.size, scope.row.persistentVolumeClaim.capacity)")
     el-table-column(label="Endpoint" prop="endpoint.port")
       template(slot-scope="scope")
         a(v-if="scope.row.chartName === 'stable/minio'" :href="`http://${scope.row.endpoint.host}:${scope.row.endpoint.port}`" target="_blank")
@@ -29,7 +29,7 @@ export default {
   name: "main",
   async mounted() {
     await this.$store.dispatch("getStorageList");
-    setInterval(() => this.$store.dispatch("updateStorageList"), 10000);
+    setInterval(() => this.$store.dispatch("getStorageList"), 10000);
   },
   methods: {
     async deleteStorage(data) {
@@ -43,11 +43,19 @@ export default {
     },
     getSizeString(size) {
       const sizeMi = size / 1024 / 1024;
-      if (sizeMi < 1000) {
+      if (isNaN(size)) {
+        return 0 + "Mi";
+      }
+      else if (sizeMi < 1000) {
         return Math.round(sizeMi * 100) / 100 + "Mi";
       } else {
         return Math.round((sizeMi / 1024) * 100) / 100 + "Gi";
       }
+    },
+    getPercentage(size, capacity) {
+      if (isNaN(size / capacity) || capacity < size) {
+        return 0;
+      } else return Math.round((size / capacity) * 100);
     }
   }
 };
