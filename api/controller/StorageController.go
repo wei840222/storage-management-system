@@ -1,10 +1,11 @@
 package controller
 
 import (
-	"encoding/json"
-	"net/http"
 	"storage-management-system/model"
 	"storage-management-system/service"
+
+	"encoding/json"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/globalsign/mgo/bson"

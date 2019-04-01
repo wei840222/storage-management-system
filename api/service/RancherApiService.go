@@ -1,12 +1,13 @@
 package service
 
 import (
+	"storage-management-system/config"
+	"storage-management-system/model"
+
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"storage-management-system/config"
-	"storage-management-system/model"
 	"strconv"
 	"strings"
 
