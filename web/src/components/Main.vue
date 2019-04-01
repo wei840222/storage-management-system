@@ -76,9 +76,7 @@ export default {
       } else return Math.round((size / capacity) * 100);
     },
     showMonitor(data) {
-      this.prometheusUrl.cpu = data.prometheusUrl.CPU;
-      this.prometheusUrl.memory = data.prometheusUrl.Memory;
-      this.prometheusUrl.network = data.prometheusUrl.Network;
+      this.prometheusUrl = data.prometheusUrl;
       this.monitorShow = true;
     },
     closeMonitor() {
