@@ -31,6 +31,7 @@ func (h *HelmService) CreateStorage(storage *model.Storage) (string, []byte, err
 	if err != nil {
 		panic(err)
 	}
+	log.Printf("CreateStorage %s", stdout)
 	if strings.Contains(string(stdout), "Error") {
 		return "", nil, errors.New(string(stdout))
 	}
@@ -46,6 +47,7 @@ func (h *HelmService) GetStorage(realseName string) []byte {
 	if err != nil {
 		panic(err)
 	}
+	log.Printf("GetStorage %s", stdout)
 	resource := gjson.Get(string(stdout), "resources").String()
 	return []byte(resource)
 }

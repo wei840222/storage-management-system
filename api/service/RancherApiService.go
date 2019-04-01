@@ -77,7 +77,7 @@ func (r *RancherApiService) GetPVCStatus(storage *model.Storage) {
 
 func (r *RancherApiService) GetPrometheusUrl(storage *model.Storage) {
 	storage.PrometheusURL = make(map[string]string)
-	storage.PrometheusURL["CPU"] = fmt.Sprintf("%s/d-solo/pECWlF6ik/pods?orgId=1&var-namespace=%s&var-pod=%s&var-container=All&refresh=5s&panelId=2&theme=light", r.config.PrometheusUiUrl, r.config.DeployNamespace, storage.GetResourceName("Pod"))
-	storage.PrometheusURL["Memory"] = fmt.Sprintf("%s/d-solo/pECWlF6ik/pods?orgId=1&var-namespace=%s&var-pod=%s&var-container=All&refresh=5s&panelId=1&theme=light", r.config.PrometheusUiUrl, r.config.DeployNamespace, storage.GetResourceName("Pod"))
-	storage.PrometheusURL["Network"] = fmt.Sprintf("%s/d-solo/pECWlF6ik/pods?orgId=1&var-namespace=%s&var-pod=%s&var-container=All&refresh=5s&panelId=3&theme=light", r.config.PrometheusUiUrl, r.config.DeployNamespace, storage.GetResourceName("Pod"))
+	storage.PrometheusURL["CPU"] = fmt.Sprintf("%s/pods?orgId=1&var-namespace=%s&var-pod=%s&var-container=All&refresh=5s&panelId=2&theme=light", r.config.PrometheusUiUrl, r.config.DeployNamespace, storage.GetResourceName("Pod"))
+	storage.PrometheusURL["Memory"] = fmt.Sprintf("%s/pods?orgId=1&var-namespace=%s&var-pod=%s&var-container=All&refresh=5s&panelId=1&theme=light", r.config.PrometheusUiUrl, r.config.DeployNamespace, storage.GetResourceName("Pod"))
+	storage.PrometheusURL["Network"] = fmt.Sprintf("%s/pods?orgId=1&var-namespace=%s&var-pod=%s&var-container=All&refresh=5s&panelId=3&theme=light", r.config.PrometheusUiUrl, r.config.DeployNamespace, storage.GetResourceName("Pod"))
 }
