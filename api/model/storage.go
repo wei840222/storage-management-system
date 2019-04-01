@@ -25,6 +25,9 @@ func (s *Storage) GetResourceName(resourceType string) string {
 			resource = r
 		}
 	}
+	if resource == nil {
+		return ""
+	}
 	if resourceName, ok := resource["resources"].([]interface{})[0].(string); ok {
 		return resourceName
 	}
