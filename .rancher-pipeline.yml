@@ -1,5 +1,5 @@
 stages:
-- name: Push Docker Image
+- name: Push Backend Docker Image
   steps:
   - publishImageConfig:
       dockerfilePath: ./api/Dockerfile
@@ -7,6 +7,8 @@ stages:
       tag: wei840222/storage-management-system-api
       pushRemote: true
       registry: index.docker.io
+- name: Push Frontend Docker Image
+  steps:
   - publishImageConfig:
       dockerfilePath: ./web/Dockerfile
       buildContext: ./web
