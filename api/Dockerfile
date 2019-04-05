@@ -1,5 +1,5 @@
-FROM golang:alpine
-RUN apk add --update --no-cache git bash curl nodejs ca-certificates && \
+FROM golang:1.12-stretch
+RUN apt install -y git bash curl nodejs ca-certificates && \
     curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz |tar xvz && \
     mv linux-amd64/helm /usr/bin/helm && \
     chmod +x /usr/bin/helm && \
