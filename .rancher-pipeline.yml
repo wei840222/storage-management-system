@@ -1,0 +1,9 @@
+stages:
+- name: push
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./api/Dockerfile
+      buildContext: .
+      tag: storage-management-system-api
+timeout: 60
+notification: {}
