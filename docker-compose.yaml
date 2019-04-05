@@ -1,11 +1,15 @@
 version: '2'
 services:
-    web:
-        build: ./web
+    redoc:
+        build: ./redoc
         ports:
-            - 80:80
-        depends_on:
-            - api
+            - 8081:80
+    mongodb:
+        image: mongo
+        ports:
+            - 27017:27017
+        volumes:
+            - db_data:/data/db
     api:
         build: ./api
         ports:
@@ -14,20 +18,12 @@ services:
             - MONGO_URL=mongodb://mongodb:27017
         depends_on:
             - mongodb
-    mongodb:
-        image: mongo
+    web:
+        build: ./web
         ports:
-            - 27017:27017
-        volumes:
-            - db_data:/data/db
-    api-doc:
-        image: redocly/redoc
-        ports:
-            - 8081:80
-        environment:
-            - SPEC_URL=openapi.yaml
-        volumes:
-            - ./openapi.yaml:/usr/share/nginx/html/openapi.yaml
+            - 80:80
+        depends_on:
+            - api
 
 volumes:
   db_data:

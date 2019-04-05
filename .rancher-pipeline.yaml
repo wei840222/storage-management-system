@@ -23,12 +23,16 @@ stages:
       tag: wei840222/storage-management-system-web
       pushRemote: true
       registry: index.docker.io
-- name: Deploy
+- name: Deploy Redoc
   steps:
   - applyYamlConfig:
       path: ./k8s/redoc.yaml
+- name: Deploy Api
+  steps:
   - applyYamlConfig:
       path: ./k8s/api.yaml
+- name: Deploy Web
+  steps:
   - applyYamlConfig:
       path: ./k8s/web.yaml
 timeout: 60
