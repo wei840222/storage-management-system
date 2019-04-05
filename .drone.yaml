@@ -1,0 +1,8 @@
+pipeline:
+  push-redoc:
+    image: plugins/docker
+    username: wei840222
+    password: j04rmp4jo3
+    repo: wei840222/storage-management-system-redoc
+    tags: latest
+    context: redoc
