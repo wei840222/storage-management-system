@@ -2,8 +2,13 @@ stages:
 - name: push
   steps:
   - publishImageConfig:
-      buildContext: ./api
       dockerfilePath: ./api/Dockerfile
+      buildContext: ./api
       tag: storage-management-system-api
+      pushRemote: true
+      registry: index.docker.io
 timeout: 60
+branch:
+  include:
+  - master
 notification: {}
