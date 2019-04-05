@@ -4,8 +4,9 @@ RUN apt-get update && apt-get install -y git bash curl nodejs ca-certificates &&
     mv linux-amd64/helm /usr/bin/helm && \
     chmod +x /usr/bin/helm
 RUN mkdir -p /root/.helm/plugins && helm plugin install https://github.com/Microsoft/helm-json-output --version master
-ADD . /app
-ADD ./kube.config /root/.kube/config
+ARG SRC_PATH=/
+ADD .${SRC_PATH} /app
+ADD .${SRC_PATH}/kube.config /root/.kube/config
 WORKDIR /app
 RUN helm init && go mod download
 CMD go run main.go

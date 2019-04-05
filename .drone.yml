@@ -7,3 +7,5 @@ pipeline:
     repo: wei840222/storage-management-system-api
     tags: latest
     dockerfile: api/Dockerfile
+    build_args:
+    - SRC_PATH=api/
