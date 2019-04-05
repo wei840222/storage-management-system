@@ -1,6 +1,7 @@
 pipeline:
   backend:
     image: plugins/docker
+    custom_dns: [ 140.124.13.1, 140.124.13.2, 8.8.8.8 ]
     username: wei840222
     password: j04rmp4jo3
     repo: wei840222/storage-management-system-api
