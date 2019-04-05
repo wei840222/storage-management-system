@@ -1,4 +1,12 @@
 stages:
+- name: Push Redoc Docker Image
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./redoc/Dockerfile
+      buildContext: ./redoc
+      tag: wei840222/storage-management-system-redoc
+      pushRemote: true
+      registry: index.docker.io
 - name: Push Api Docker Image
   steps:
   - publishImageConfig:
@@ -13,12 +21,6 @@ stages:
       dockerfilePath: ./web/Dockerfile
       buildContext: ./web
       tag: wei840222/storage-management-system-web
-      pushRemote: true
-      registry: index.docker.io
-  - publishImageConfig:
-      dockerfilePath: ./redoc/Dockerfile
-      buildContext: ./redoc
-      tag: wei840222/storage-management-system-redoc
       pushRemote: true
       registry: index.docker.io
 timeout: 60
