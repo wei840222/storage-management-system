@@ -26,7 +26,11 @@ stages:
 - name: Deploy
   steps:
   - applyYamlConfig:
-      path: ./k8s/redoc.yml
+      path: ./k8s/redoc.yaml
+  - applyYamlConfig:
+      path: ./k8s/api.yaml
+  - applyYamlConfig:
+      path: ./k8s/web.yaml
 timeout: 60
 branch:
   include:

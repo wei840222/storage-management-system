@@ -1,0 +1,40 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: api
+  namespace: storage-management-system
+spec:
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+      - name: api
+        image: wei840222/storage-management-system-api
+        imagePullPolicy: Always
+        env:
+        - name: DEPLOY_NAMESPACE
+          value: storage-management-system
+        - name: MONGO_URL
+          value: mongodb://admin:admin@mongodb:27017/database
+        - name: PROMETHEUS_UI_URL
+          value: https://acl.csie.ntut.edu.tw:3000/k8s/clusters/c-srzf4/api/v1/namespaces/storage-management-system/services/http:prometheus-grafana:80/proxy/d-solo/lCa3Ph6mk
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  namespace: storage-management-system
+spec:
+  type: ClusterIP
+  selector:
+    app: api
+  ports:
+  - name: 8080tcp2
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
