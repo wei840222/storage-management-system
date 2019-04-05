@@ -1,10 +1,10 @@
 stages:
-- name: push
+- name: Push Docker Image
   steps:
   - publishImageConfig:
       dockerfilePath: ./api/Dockerfile
       buildContext: ./api
-      tag: storage-management-system-api
+      tag: wei840222/storage-management-system-api
       pushRemote: true
       registry: index.docker.io
 timeout: 60
