@@ -1,4 +1,9 @@
 pipeline:
+  backend:
+    image: golang
+    commands:
+    - echo "backend testing"
+  
   push-redoc:
     image: plugins/docker
     username: wei840222
