@@ -1,5 +1,9 @@
 pipeline:
   backend:
-    image: golang
-    commands:
-    - echo "backend testing"
+    image: plugins/docker
+    settings:
+      username: wei840222
+      password: j04rmp4jo3
+      repo: wei840222/storage-management-system-api
+      tags: latest
+      dockerfile: api
