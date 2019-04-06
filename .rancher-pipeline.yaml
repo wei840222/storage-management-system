@@ -65,4 +65,5 @@ branch:
   - master
   - api_dev
   - web_dev
+  - k8s_dev
 notification: {}
