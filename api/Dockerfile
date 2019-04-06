@@ -10,4 +10,4 @@ ADD . /app
 ADD ./kube.config /root/.kube/config
 WORKDIR /app
 RUN helm init && go mod download
-CMD  && go run main.go
+CMD go run main.go
