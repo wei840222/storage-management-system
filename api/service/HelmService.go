@@ -28,10 +28,10 @@ func (h *HelmService) CreateStorage(storage *model.Storage) (string, []byte, err
 	cmd = strings.TrimSuffix(cmd, ",") + " --namespace " + h.config.DeployNamespace + " " + storage.ChartName
 	log.Printf("CreateStorage cmd: %s", cmd)
 	stdout, err := exec.Command("bash", "-c", cmd).CombinedOutput()
+	log.Printf("CreateStorage %s", stdout)
 	if err != nil {
 		log.Panic(err)
 	}
-	log.Printf("CreateStorage %s", stdout)
 	if strings.Contains(string(stdout), "Error") {
 		return "", nil, errors.New(string(stdout))
 	}
@@ -44,10 +44,10 @@ func (h *HelmService) GetStorage(realseName string) []byte {
 	cmd := "helm json status " + realseName
 	log.Printf("GetStorage cmd: %s", cmd)
 	stdout, err := exec.Command("bash", "-c", cmd).CombinedOutput()
+	log.Printf("GetStorage %s", stdout)
 	if err != nil {
 		log.Panic(err)
 	}
-	log.Printf("GetStorage %s", stdout)
 	resource := gjson.Get(string(stdout), "resources").String()
 	return []byte(resource)
 }
@@ -56,8 +56,8 @@ func (h *HelmService) DeleteStorage(realseName string) {
 	cmd := "helm delete --purge " + realseName
 	log.Printf("DeleteStorage cmd: %s", cmd)
 	stdout, err := exec.Command("bash", "-c", cmd).CombinedOutput()
+	log.Printf("DeleteStorage %s", stdout)
 	if err != nil {
 		log.Panic(err)
 	}
-	log.Printf("DeleteStorage %s", stdout)
 }
