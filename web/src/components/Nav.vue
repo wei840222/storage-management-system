@@ -107,12 +107,18 @@ export default {
           capacity: 0
         };
         this.$store.dispatch("getStorageList");
+        this.$notify({
+          title: "Created",
+          message: `Create ${data.chartName.split("/")[1]} success!`,
+          type: "success"
+        });
+      } else {
+        this.$notify({
+          title: "Failed",
+          message: `Create ${data.chartName.split("/")[1]} failed!`,
+          type: "error"
+        });
       }
-      this.$notify({
-        title: "Created",
-        message: `Create ${data.chartName.split("/")[1]} success!`,
-        type: "success"
-      });
       data.dialogFormVisible = false;
       data.creating = false;
     }

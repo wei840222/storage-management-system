@@ -48,15 +48,19 @@ export default {
   methods: {
     async deleteStorage(data) {
       data.status = "deleting";
-      const res = await this.$axios.delete(
-        `/storage/${data.releaseName}`
-      );
+      const res = await this.$axios.delete(`/storage/${data.releaseName}`);
       if (res.data.code === 200) {
         await this.$store.dispatch("getStorageList");
         this.$notify({
           title: "Deleted",
           message: `Delete ${data.chartName.split("/")[1]} success!`,
           type: "success"
+        });
+      } else {
+        this.$notify({
+          title: "Failed",
+          message: `Delete ${data.chartName.split("/")[1]} failed!`,
+          type: "error"
         });
       }
     },
