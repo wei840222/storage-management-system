@@ -10,6 +10,7 @@ stages:
   when:
     branch: master
     event: [ push, pull_request ]
+
 - name: Push Api Docker Image
   steps:
   - publishImageConfig:
@@ -21,6 +22,7 @@ stages:
   when:
     branch: [ master, api_dev ]
     event: [ push, pull_request ]
+
 - name: Push Web Docker Image
   steps:
   - publishImageConfig:
@@ -32,27 +34,31 @@ stages:
   when:
     branch: [ master, web_dev ]
     event: [ push, pull_request ]
+
 - name: Deploy Redoc
   steps:
   - applyYamlConfig:
       path: ./k8s/redoc.yaml
   when:
-    branch: master
+    branch: [ master, k8s_dev ]
     event: [ push, pull_request ]
+
 - name: Deploy Api
   steps:
   - applyYamlConfig:
       path: ./k8s/api.yaml
   when:
-    branch: [ master, api_dev ]
+    branch: [ master, k8s_dev, api_dev ]
     event: [ push, pull_request ]
+
 - name: Deploy Web
   steps:
   - applyYamlConfig:
       path: ./k8s/web.yaml
   when:
-    branch: [ master, web_dev ]
+    branch: [ master, k8s_dev, web_dev ]
     event: [ push, pull_request ]
+
 timeout: 60
 branch:
   include:
