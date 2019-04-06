@@ -23,6 +23,7 @@ func (c *CronService) Strat() {
 	c.cron.AddFunc("*/10 * * * * ?", func() {
 		storageList := c.mongoService.ListStorage()
 		for _, storage := range *storageList {
+			c.rancherApiService.GetPrometheusUrl(&storage)
 			c.rancherApiService.GetPodStatus(&storage)
 			c.rancherApiService.GetServiceEndpoint(&storage)
 			c.rancherApiService.GetPVCStatus(&storage)
