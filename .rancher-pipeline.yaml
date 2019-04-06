@@ -7,6 +7,9 @@ stages:
       tag: wei840222/storage-management-system-redoc
       pushRemote: true
       registry: index.docker.io
+  when:
+    branch: master
+    event: [ push, pull_request ]
 - name: Push Api Docker Image
   steps:
   - publishImageConfig:
@@ -15,6 +18,9 @@ stages:
       tag: wei840222/storage-management-system-api
       pushRemote: true
       registry: index.docker.io
+  when:
+    branch: [ master, api_dev ]
+    event: [ push, pull_request ]
 - name: Push Web Docker Image
   steps:
   - publishImageConfig:
@@ -23,20 +29,34 @@ stages:
       tag: wei840222/storage-management-system-web
       pushRemote: true
       registry: index.docker.io
+  when:
+    branch: [ master, web_dev ]
+    event: [ push, pull_request ]
 - name: Deploy Redoc
   steps:
   - applyYamlConfig:
       path: ./k8s/redoc.yaml
+  when:
+    branch: master
+    event: [ push, pull_request ]
 - name: Deploy Api
   steps:
   - applyYamlConfig:
       path: ./k8s/api.yaml
+  when:
+    branch: [ master, api_dev ]
+    event: [ push, pull_request ]
 - name: Deploy Web
   steps:
   - applyYamlConfig:
       path: ./k8s/web.yaml
+  when:
+    branch: [ master, web_dev ]
+    event: [ push, pull_request ]
 timeout: 60
 branch:
   include:
   - master
+  - api_dev
+  - web_dev
 notification: {}
