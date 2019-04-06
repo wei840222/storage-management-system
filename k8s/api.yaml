@@ -17,6 +17,8 @@ spec:
         image: wei840222/storage-management-system-api
         imagePullPolicy: Always
         env:
+        - name: RANCHER_API_URL
+          value: https://acl.csie.ntut.edu.tw:3000/v3/project/c-srzf4:p-4cznw
         - name: DEPLOY_NAMESPACE
           value: p-4cznw-deploy
         - name: MONGO_URL
