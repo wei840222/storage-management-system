@@ -29,7 +29,7 @@ func (h *HelmService) CreateStorage(storage *model.Storage) (string, []byte, err
 	log.Printf("CreateStorage cmd: %s", cmd)
 	stdout, err := exec.Command("bash", "-c", cmd).CombinedOutput()
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	log.Printf("CreateStorage %s", stdout)
 	if strings.Contains(string(stdout), "Error") {
@@ -45,7 +45,7 @@ func (h *HelmService) GetStorage(realseName string) []byte {
 	log.Printf("GetStorage cmd: %s", cmd)
 	stdout, err := exec.Command("bash", "-c", cmd).CombinedOutput()
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	log.Printf("GetStorage %s", stdout)
 	resource := gjson.Get(string(stdout), "resources").String()
@@ -57,7 +57,7 @@ func (h *HelmService) DeleteStorage(realseName string) {
 	log.Printf("DeleteStorage cmd: %s", cmd)
 	stdout, err := exec.Command("bash", "-c", cmd).CombinedOutput()
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	log.Printf("DeleteStorage %s", stdout)
 }
