@@ -2,7 +2,7 @@ apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: api
-  namespace: p-4cznw-deploy
+  namespace: p-w6z2f-deploy
 spec:
   selector:
     matchLabels:
@@ -18,19 +18,19 @@ spec:
         imagePullPolicy: Always
         env:
         - name: RANCHER_API_URL
-          value: https://acl.csie.ntut.edu.tw:3000/v3/project/c-srzf4:p-4cznw
+          value: https://acl.csie.ntut.edu.tw:3000/v3/project/c-zjq9r:p-w6z2f
         - name: DEPLOY_NAMESPACE
-          value: p-4cznw-deploy
+          value: p-w6z2f-deploy
         - name: MONGO_URL
           value: mongodb://wei840222:j04rmp4jo3@mongodb:27017/database
         - name: PROMETHEUS_UI_URL
-          value: https://acl.csie.ntut.edu.tw:3000/k8s/clusters/c-srzf4/api/v1/namespaces/cattle-prometheus/services/http:access-grafana:80/proxy/d-solo/XSOTSYxiz
+          value: https://acl.csie.ntut.edu.tw:3000/k8s/clusters/c-zjq9r/api/v1/namespaces/cattle-prometheus/services/http:access-grafana:80/proxy/d-solo/XSOTSYxiz
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: api
-  namespace: p-4cznw-deploy
+  namespace: p-w6z2f-deploy
 spec:
   type: ClusterIP
   selector:
