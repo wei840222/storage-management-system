@@ -44,7 +44,7 @@
           el-input(v-model="mongodb.config.mongodbDatabase")
         el-form-item(label="size")
           el-select(v-model="mongodb.config['persistence.size']" placeholder="size")
-            el-option(v-for="s in ['2G','4G','8G','20G','40G']" :key="s" :label="s" :value="s")
+            el-option(v-for="s in ['2G','4G','8G','20G','40G', '100G', '500G']" :key="s" :label="s" :value="s")
       .dialog-footer(slot="footer")
         el-button(type="primary" :loading="mongodb.creating" @click="create(mongodb)") Create
         el-button(@click="mongodb.dialogFormVisible = false") Cancel
@@ -63,8 +63,7 @@ export default {
           secretKey: "",
           "persistence.size": "2G",
           "service.type": "NodePort",
-          "service.nodePort": "",
-          "resources.limits.memory": "512Mi"
+          "service.nodePort": ""
         }
       },
       mysql: {
@@ -77,8 +76,7 @@ export default {
           mysqlDatabase: "database",
           "persistence.size": "2G",
           "service.type": "NodePort",
-          "service.nodePort": "",
-          "resources.limits.memory": "512Mi"
+          "service.nodePort": ""
         }
       },
       mongodb: {
@@ -91,8 +89,7 @@ export default {
           mongodbDatabase: "database",
           "persistence.size": "2G",
           "service.type": "NodePort",
-          "service.nodePort": "",
-          "resources.limits.memory": "512Mi"
+          "service.nodePort": ""
         }
       }
     };
