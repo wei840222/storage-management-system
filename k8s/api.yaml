@@ -19,6 +19,8 @@ spec:
         env:
         - name: RANCHER_API_URL
           value: https://acl.csie.ntut.edu.tw:3000/v3/project/c-zjq9r:p-w6z2f
+        - name: RANCHER_API_TOKEN
+          value: token-dq8zr:69jdtpmmnz6xxzrrxqlhcccjbpjv9rdmddrrvljktg7ndst5mnbxfn
         - name: DEPLOY_NAMESPACE
           value: p-w6z2f-deploy
         - name: MONGO_URL
