@@ -44,7 +44,7 @@
           el-input(v-model="mongodb.config.mongodbDatabase")
         el-form-item(label="size")
           el-select(v-model="mongodb.config['persistence.size']" placeholder="size")
-            el-option(v-for="s in ['2G','4G','8G','20G','40G', '100G', '500G']" :key="s" :label="s" :value="s")
+            el-option(v-for="s in ['2G','10G','20G','40G','100G','500G']" :key="s" :label="s" :value="s")
       .dialog-footer(slot="footer")
         el-button(type="primary" :loading="mongodb.creating" @click="create(mongodb)") Create
         el-button(@click="mongodb.dialogFormVisible = false") Cancel
