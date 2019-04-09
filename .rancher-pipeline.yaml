@@ -38,7 +38,7 @@ stages:
 - name: Kustomize
   steps:
   - runScriptConfig:
-      image: bitlayer/kustomize
+      image: bitlayer/kustomize:v2.0.3
       shellScript: cd k8s && ls && env && kustomize edit set namespace test && kustomize edit set image wei840222/storage-management-system-api:v2 && kustomize build . > k8s.yaml && cat k8s.yaml
   when:
     branch: [ master, k8s_dev ]
