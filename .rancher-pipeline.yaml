@@ -35,10 +35,11 @@ stages:
     branch: [ master, web_dev ]
     event: [ push, pull_request ]
 
-- name: Deploy Redoc
+- name: Kustomize
   steps:
-  - applyYamlConfig:
-      path: ./k8s/redoc.yaml
+  - runScriptConfig:
+      image: bitlayer/kustomize
+      shellScript: cd k8s && ls && env && kustomize edit set namespace test && kustomize edit set image wei840222/storage-management-system-api:v2 && kustomize build . > k8s.yaml && cat k8s.yaml
   when:
     branch: [ master, k8s_dev ]
     event: [ push, pull_request ]
@@ -49,14 +50,6 @@ stages:
       path: ./k8s/api.yaml
   when:
     branch: [ master, k8s_dev, api_dev ]
-    event: [ push, pull_request ]
-
-- name: Deploy Web
-  steps:
-  - applyYamlConfig:
-      path: ./k8s/web.yaml
-  when:
-    branch: [ master, k8s_dev, web_dev ]
     event: [ push, pull_request ]
 
 timeout: 60
