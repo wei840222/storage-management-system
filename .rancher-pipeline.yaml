@@ -4,7 +4,7 @@ stages:
   - publishImageConfig:
       dockerfilePath: ./redoc/Dockerfile
       buildContext: ./redoc
-      tag: wei840222/storage-management-system-redoc
+      tag: wei840222/storage-management-system-redoc:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
       pushRemote: true
       registry: index.docker.io
   when:
@@ -16,7 +16,7 @@ stages:
   - publishImageConfig:
       dockerfilePath: ./api/Dockerfile
       buildContext: ./api
-      tag: wei840222/storage-management-system-api
+      tag: wei840222/storage-management-system-api:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
       pushRemote: true
       registry: index.docker.io
   when:
@@ -28,17 +28,18 @@ stages:
   - publishImageConfig:
       dockerfilePath: ./web/Dockerfile
       buildContext: ./web
-      tag: wei840222/storage-management-system-web
+      tag: wei840222/storage-management-system-web:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
       pushRemote: true
       registry: index.docker.io
   when:
     branch: [ master, web_dev ]
     event: [ push, pull_request ]
 
-- name: Deploy Redoc
+- name: Kustomize
   steps:
-  - applyYamlConfig:
-      path: ./k8s/redoc.yaml
+  - runScriptConfig:
+      image: bitlayer/kustomize:v2.0.3
+      shellScript: cd k8s && kustomize edit set image wei840222/storage-management-system-redoc:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT} && kustomize edit set image wei840222/storage-management-system-api:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT} && kustomize edit set image wei840222/storage-management-system-web:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT} && kustomize build . > k8s.yaml && cat k8s.yaml
   when:
     branch: [ master, k8s_dev ]
     event: [ push, pull_request ]
@@ -46,17 +47,9 @@ stages:
 - name: Deploy Api
   steps:
   - applyYamlConfig:
-      path: ./k8s/api.yaml
+      path: ./k8s/k8s.yaml
   when:
     branch: [ master, k8s_dev, api_dev ]
-    event: [ push, pull_request ]
-
-- name: Deploy Web
-  steps:
-  - applyYamlConfig:
-      path: ./k8s/web.yaml
-  when:
-    branch: [ master, k8s_dev, web_dev ]
     event: [ push, pull_request ]
 
 timeout: 60

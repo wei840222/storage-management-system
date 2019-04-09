@@ -1,8 +1,26 @@
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redoc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redoc
+  template:
+    metadata:
+      labels:
+        app: redoc
+    spec:
+      containers:
+      - name: redoc
+        image: wei840222/storage-management-system-redoc
+        imagePullPolicy: Always
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api
-  namespace: p-w6z2f-deploy
 spec:
   selector:
     matchLabels:
@@ -30,17 +48,20 @@ spec:
         - name: PROMETHEUS_UI_URL
           value: https://acl.csie.ntut.edu.tw:3000/k8s/clusters/c-zjq9r/api/v1/namespaces/cattle-prometheus/services/http:access-grafana:80/proxy/d-solo/XSOTSYxiz
 ---
-apiVersion: v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: api
-  namespace: p-w6z2f-deploy
+  name: web
 spec:
-  type: ClusterIP
   selector:
-    app: api
-  ports:
-  - name: 8080tcp2
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: web
+        image: wei840222/storage-management-system-web
+        imagePullPolicy: Always
