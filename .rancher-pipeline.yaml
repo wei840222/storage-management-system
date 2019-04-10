@@ -8,9 +8,13 @@ stages:
       pushRemote: true
       registry: index.docker.io
   when:
-    branch: master
-    event: [ push, pull_request ]
-
+    branch:
+      include:
+      - master
+    event:
+      include:
+      - push
+      - pull_request
 - name: Push Api Docker Image
   steps:
   - publishImageConfig:
@@ -20,9 +24,14 @@ stages:
       pushRemote: true
       registry: index.docker.io
   when:
-    branch: [ master, api_dev ]
-    event: [ push, pull_request ]
-
+    branch:
+      include:
+      - master
+      - api_dev
+    event:
+      include:
+      - push
+      - pull_request
 - name: Push Web Docker Image
   steps:
   - publishImageConfig:
@@ -32,26 +41,45 @@ stages:
       pushRemote: true
       registry: index.docker.io
   when:
-    branch: [ master, web_dev ]
-    event: [ push, pull_request ]
-
+    branch:
+      include:
+      - master
+      - web_dev
+    event:
+      include:
+      - push
+      - pull_request
 - name: Kustomize
   steps:
   - runScriptConfig:
       image: bitlayer/kustomize:v2.0.3
-      shellScript: cd k8s && kustomize edit set image wei840222/storage-management-system-redoc:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT} && kustomize edit set image wei840222/storage-management-system-api:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT} && kustomize edit set image wei840222/storage-management-system-web:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT} && kustomize build . > k8s.yaml && cat k8s.yaml
+      shellScript: cd k8s && kustomize edit set image wei840222/storage-management-system-redoc:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
+        && kustomize edit set image wei840222/storage-management-system-api:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
+        && kustomize edit set image wei840222/storage-management-system-web:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
+        && kustomize build . > k8s.yaml && cat k8s.yaml
   when:
-    branch: [ master, k8s_dev ]
-    event: [ push, pull_request ]
-
+    branch:
+      include:
+      - master
+      - k8s_dev
+    event:
+      include:
+      - push
+      - pull_request
 - name: Deploy Api
   steps:
   - applyYamlConfig:
       path: ./k8s/k8s.yaml
   when:
-    branch: [ master, k8s_dev, api_dev ]
-    event: [ push, pull_request ]
-
+    branch:
+      include:
+      - master
+      - k8s_dev
+      - api_dev
+    event:
+      include:
+      - push
+      - pull_request
 timeout: 60
 branch:
   include:
@@ -59,4 +87,11 @@ branch:
   - api_dev
   - web_dev
   - k8s_dev
-notification: {}
+notification:
+  recipients:
+  - recipient: http://acl.csie.ntut.edu.tw:5000
+    notifier: c-zjq9r:n-47dk8
+  condition:
+  - Success
+  - Changed
+  - Failed
