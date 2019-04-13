@@ -46,7 +46,7 @@ spec:
         - name: MONGO_URL
           value: mongodb://wei840222:j04rmp4jo3@mongodb:27017/database
         - name: PROMETHEUS_UI_URL
-          value: https://acl.csie.ntut.edu.tw:3000/k8s/clusters/c-fhjcs/api/v1/namespaces/prometheus/services/http:prometheus-grafana:80/proxy/d-solo/jRXvqdgZk
+          value: https://acl.csie.ntut.edu.tw:3000/k8s/clusters/c-fhjcs/api/v1/namespaces/prometheus/services/http:prometheus-grafana:80/proxy/d-solo/b9b9FpgZk
 ---
 apiVersion: apps/v1
 kind: Deployment
