@@ -56,7 +56,7 @@ stages:
       shellScript: cd k8s && kustomize edit set image wei840222/storage-management-system-redoc:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
         && kustomize edit set image wei840222/storage-management-system-api:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
         && kustomize edit set image wei840222/storage-management-system-web:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
-        && kustomize edit set namespace p-9wwq7-deploy
+        && kustomize edit set namespace p-wfj6q-deploy
         && kustomize build . > k8s.yaml && cat k8s.yaml
   when:
     branch:
@@ -88,11 +88,3 @@ branch:
   - api_dev
   - web_dev
   - k8s_dev
-notification:
-  recipients:
-  - recipient: http://acl.csie.ntut.edu.tw:5000
-    notifier: c-zjq9r:n-47dk8
-  condition:
-  - Success
-  - Changed
-  - Failed
