@@ -11,10 +11,7 @@ stages:
     branch:
       include:
       - master
-    event:
-      include:
-      - push
-      - pull_request
+
 - name: Push Api Docker Image
   steps:
   - publishImageConfig:
@@ -28,10 +25,7 @@ stages:
       include:
       - master
       - api_dev
-    event:
-      include:
-      - push
-      - pull_request
+
 - name: Push Web Docker Image
   steps:
   - publishImageConfig:
@@ -45,10 +39,7 @@ stages:
       include:
       - master
       - web_dev
-    event:
-      include:
-      - push
-      - pull_request
+
 - name: Kustomize
   steps:
   - runScriptConfig:
@@ -63,10 +54,7 @@ stages:
       include:
       - master
       - k8s_dev
-    event:
-      include:
-      - push
-      - pull_request
+
 - name: Deploy Api
   steps:
   - applyYamlConfig:
@@ -77,10 +65,7 @@ stages:
       - master
       - k8s_dev
       - api_dev
-    event:
-      include:
-      - push
-      - pull_request
+
 timeout: 60
 branch:
   include:
