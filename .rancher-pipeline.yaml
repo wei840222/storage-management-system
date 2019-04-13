@@ -20,6 +20,10 @@ stages:
       tag: wei840222/storage-management-system-api:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
       pushRemote: true
       registry: index.docker.io
+    env:
+      PLUGIN_DEBUG: "true"
+      PLUGIN_INSECURE: "true"
+      PLUGIN_CUSTOM_DNS: "8.8.8.8"
   when:
     branch:
       include:
@@ -34,10 +38,6 @@ stages:
       tag: wei840222/storage-management-system-web:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
       pushRemote: true
       registry: index.docker.io
-    env:
-      PLUGIN_DEBUG: "true"
-      PLUGIN_INSECURE: "true"
-      PLUGIN_CUSTOM_DNS: "8.8.8.8"
   when:
     branch:
       include:
