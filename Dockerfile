@@ -5,7 +5,7 @@ RUN yarn && yarn build
 
 FROM redocly/redoc AS api-doc
 ADD ./openapi.yaml /usr/share/nginx/html/openapi.yaml
-RUN sed -i -e "s|%SPEC_URL%|api-doc/openapi.yaml|g" /usr/share/nginx/html/index.html
+RUN sed -i -e "s|%SPEC_URL%|openapi.yaml|g" /usr/share/nginx/html/index.html
 
 FROM golang:alpine
 RUN apk add --update --no-cache git bash curl nodejs ca-certificates && \
