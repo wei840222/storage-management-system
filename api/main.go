@@ -24,11 +24,11 @@ func main() {
 		defer cronService.Stop()
 		r := gin.Default()
 		r.Use(cors.Default())
+		r.Static("/", "/app/dist")
 		r.POST("/storage", storageController.CreateStorage)
 		r.GET("/storage", storageController.ListStorage)
 		r.GET("/storage/:releaseName", storageController.GetStorage)
 		r.DELETE("/storage/:releaseName", storageController.DeleteStorage)
-		r.Static("/web", "/app/dist")
 		r.Run(":8080")
 	}); err != nil {
 		panic(err)
