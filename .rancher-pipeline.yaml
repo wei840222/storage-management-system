@@ -2,8 +2,8 @@ stages:
 - name: Push Image
   steps:
   - publishImageConfig:
-      dockerfilePath: ./web/Dockerfile
-      buildContext: ./web
+      dockerfilePath: ./Dockerfile
+      buildContext: ./
       tag: wei840222/storage-management-system:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
       pushRemote: true
       registry: index.docker.io
