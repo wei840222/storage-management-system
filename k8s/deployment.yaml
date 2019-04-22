@@ -36,17 +36,17 @@ spec:
         imagePullPolicy: Always
         env:
         - name: RANCHER_API_URL
-          value: https://acl.csie.ntut.edu.tw:3000/v3/project/c-fhjcs:p-wfj6q
+          value: https://acl.csie.ntut.edu.tw:3000/v3/project/c-c4w72:p-cxzl6
         - name: RANCHER_API_TOKEN
-          value: token-p2npk:blnj2zzgzfvqjcgf7cft8k44zg49v8pknr7bzhb2dx7rrwzt6wwz6n
+          value: token-htv5n:q99px55xhn9nf2x56k27mndv6htbmldrgqfbbw5rg9xmk94ht6pr4c
         - name: LONGHORN_API_URL
-          value: https://acl.csie.ntut.edu.tw:3000/k8s/clusters/c-fhjcs/api/v1/namespaces/longhorn-system/services/http:longhorn-frontend:80/proxy/v1/volumes
+          value: https://acl.csie.ntut.edu.tw:3000/k8s/clusters/c-c4w72/api/v1/namespaces/longhorn-system/services/http:longhorn-frontend:80/proxy/v1/volumes
         - name: DEPLOY_NAMESPACE
           value: p-wfj6q-deploy
         - name: MONGO_URL
           value: mongodb://wei840222:j04rmp4jo3@mongodb:27017/database
         - name: PROMETHEUS_UI_URL
-          value: https://acl.csie.ntut.edu.tw:3000/k8s/clusters/c-fhjcs/api/v1/namespaces/prometheus/services/http:prometheus-grafana:80/proxy/d-solo/KLqEptgWk
+          value: https://acl.csie.ntut.edu.tw:3000/k8s/clusters/c-c4w72/api/v1/namespaces/cattle-prometheus/services/http:access-grafana:80/proxy/d-solo/XSOTSYxiz
 ---
 apiVersion: apps/v1
 kind: Deployment

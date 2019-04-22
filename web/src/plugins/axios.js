@@ -9,7 +9,7 @@ import axios from "axios";
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 let config = {
-  baseURL: "https://acl.csie.ntut.edu.tw:3000/k8s/clusters/c-fhjcs/api/v1/namespaces/p-wfj6q-deploy/services/http:api:8080/proxy",
+  baseURL: "https://acl.csie.ntut.edu.tw:3000/k8s/clusters/c-c4w72/api/v1/namespaces/p-cxzl6-deploy/services/http:api:8080/proxy",
   timeout: 60 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
