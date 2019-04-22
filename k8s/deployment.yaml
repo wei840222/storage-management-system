@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
+  name: storage-management-system
 spec:
   selector:
     matchLabels:
-      app: api
+      app: storage-management-system
   template:
     metadata:
       labels:
-        app: api
+        app: storage-management-system
     spec:
       containers:
-      - name: api
+      - name: storage-management-system
         image: wei840222/storage-management-system
         imagePullPolicy: Always
         env:

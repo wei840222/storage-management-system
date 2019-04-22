@@ -2,6 +2,7 @@ module storage-management-system
 
 require (
 	github.com/gin-contrib/cors v0.0.0-20190301062745-f9e10995c85a
+	github.com/gin-contrib/static v0.0.0-20190301062546-ed515893e96b
 	github.com/gin-gonic/gin v1.3.0
 	github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8
 	github.com/go-stack/stack v1.8.0 // indirect
