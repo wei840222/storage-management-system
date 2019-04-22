@@ -28,6 +28,7 @@ func main() {
 		r.GET("/storage", storageController.ListStorage)
 		r.GET("/storage/:releaseName", storageController.GetStorage)
 		r.DELETE("/storage/:releaseName", storageController.DeleteStorage)
+		r.Static("/", "/app/dist")
 		r.Run(":8080")
 	}); err != nil {
 		panic(err)
