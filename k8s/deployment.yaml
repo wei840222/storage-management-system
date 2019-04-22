@@ -42,7 +42,7 @@ spec:
         - name: LONGHORN_API_URL
           value: https://acl.csie.ntut.edu.tw:3000/k8s/clusters/c-c4w72/api/v1/namespaces/longhorn-system/services/http:longhorn-frontend:80/proxy/v1/volumes
         - name: DEPLOY_NAMESPACE
-          value: p-wfj6q-deploy
+          value: p-cxzl6-deploy
         - name: MONGO_URL
           value: mongodb://wei840222:j04rmp4jo3@mongodb:27017/database
         - name: PROMETHEUS_UI_URL
