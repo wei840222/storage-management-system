@@ -11,10 +11,7 @@ stages:
     branch:
       include:
       - master
-    event:
-      include:
-      - push
-      - pull_request
+
 - name: Push Api Docker Image
   steps:
   - publishImageConfig:
@@ -23,15 +20,16 @@ stages:
       tag: wei840222/storage-management-system-api:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
       pushRemote: true
       registry: index.docker.io
+    env:
+      PLUGIN_DEBUG: "true"
+      PLUGIN_INSECURE: "true"
+      PLUGIN_CUSTOM_DNS: "140.124.13.1,140.124.13.2"
   when:
     branch:
       include:
       - master
       - api_dev
-    event:
-      include:
-      - push
-      - pull_request
+
 - name: Push Web Docker Image
   steps:
   - publishImageConfig:
@@ -45,10 +43,7 @@ stages:
       include:
       - master
       - web_dev
-    event:
-      include:
-      - push
-      - pull_request
+
 - name: Kustomize
   steps:
   - runScriptConfig:
@@ -56,17 +51,14 @@ stages:
       shellScript: cd k8s && kustomize edit set image wei840222/storage-management-system-redoc:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
         && kustomize edit set image wei840222/storage-management-system-api:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
         && kustomize edit set image wei840222/storage-management-system-web:${CICD_GIT_BRANCH}-${CICD_GIT_COMMIT}
-        && kustomize edit set namespace p-9wwq7-deploy
+        && kustomize edit set namespace p-wfj6q-deploy
         && kustomize build . > k8s.yaml && cat k8s.yaml
   when:
     branch:
       include:
       - master
       - k8s_dev
-    event:
-      include:
-      - push
-      - pull_request
+
 - name: Deploy Api
   steps:
   - applyYamlConfig:
@@ -77,10 +69,7 @@ stages:
       - master
       - k8s_dev
       - api_dev
-    event:
-      include:
-      - push
-      - pull_request
+
 timeout: 60
 branch:
   include:
@@ -88,11 +77,3 @@ branch:
   - api_dev
   - web_dev
   - k8s_dev
-notification:
-  recipients:
-  - recipient: http://acl.csie.ntut.edu.tw:5000
-    notifier: c-zjq9r:n-47dk8
-  condition:
-  - Success
-  - Changed
-  - Failed
