@@ -6,6 +6,7 @@ import (
 	"storage-management-system/service"
 
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/dig"
 )
@@ -24,7 +25,7 @@ func main() {
 		defer cronService.Stop()
 		r := gin.Default()
 		r.Use(cors.Default())
-		r.Static("/", "/app/dist")
+		r.Use(static.Serve("/", static.LocalFile("/app/dist", false)))
 		r.POST("/storage", storageController.CreateStorage)
 		r.GET("/storage", storageController.ListStorage)
 		r.GET("/storage/:releaseName", storageController.GetStorage)
