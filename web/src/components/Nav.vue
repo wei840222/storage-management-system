@@ -29,11 +29,11 @@
               el-input(v-model="minio.config['resources.limits.memory']")
                 template(slot="prepend") Memory limits
         el-form-item(label="persistence")
-          el-switch(v-model="minio.config['persistence.enabled']" active-color="#13ce66" inactive-color="#ff4949")
-        el-form-item(v-if="minio.config['persistence.enabled']" label="storageClass")
+          el-switch(v-model="minio.config['persistence.enabled']" active-color="#13ce66" inactive-color="#ff4949"  active-value="true" inactive-value="false")
+        el-form-item(v-if="minio.config['persistence.enabled'] == 'true'" label="storageClass")
           el-select(v-model="minio.config['persistence.storageClass']" placeholder="storageClass")
             el-option(v-for="s in ['longhorn','nfs-provisioner']" :key="s" :label="s" :value="s")
-        el-form-item(v-if="minio.config['persistence.enabled']" label="size")
+        el-form-item(v-if="minio.config['persistence.enabled'] == 'true'" label="size")
           el-select(v-model="minio.config['persistence.size']" placeholder="size")
             el-option(v-for="s in ['2G','10G','50G','100G','500G']" :key="s" :label="s" :value="s")
       .dialog-footer(slot="footer")
@@ -82,7 +82,7 @@ export default {
         config: {
           accessKey: "",
           secretKey: "",
-          "persistence.enabled": false,
+          "persistence.enabled": 'false',
           "persistence.size": "2G",
           "persistence.storageClass": "longhorn",
           "service.type": "NodePort",
@@ -124,7 +124,6 @@ export default {
   methods: {
     async create(data) {
       data.creating = true;
-      data.config['persistence.enabled'] = data.config['persistence.enabled'] ? 'true' : 'false'
       const res = await this.$axios.post("/storage", data);
       if (res.data.code === 201) {
         res.data.data.persistentVolumeClaim = {
