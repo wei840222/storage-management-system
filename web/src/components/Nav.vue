@@ -7,12 +7,33 @@
       el-menu-item(index="mongodb" @click="mongodb.dialogFormVisible = true") mongodb
     
     el-dialog(title="Create minio storage" :visible.sync="minio.dialogFormVisible")
-      el-form(:model="minio.config" label-position="left" label-width="80px")
+      el-form(:model="minio.config" label-position="left" label-width="120px")
         el-form-item(label="accessKey")
           el-input(v-model="minio.config.accessKey")
         el-form-item(label="secretKey")
-          el-input(v-model="minio.config.secretKey")
-        el-form-item(label="size")
+          el-input(show-password v-model="minio.config.secretKey")
+        el-form-item(label="resources")
+          el-row(type="flex" justify="space-between")
+            el-col(:span="11")
+              el-input(v-model="minio.config['resources.requests.cpu']")
+                template(slot="prepend") CPU requests
+            el-col(:span="12")
+              el-input(v-model="minio.config['resources.requests.memory']")
+                template(slot="prepend") Memory requests
+        el-form-item
+          el-row(type="flex" justify="space-between")
+            el-col(:span="11")
+              el-input(v-model="minio.config['resources.limits.cpu']")
+                template(slot="prepend") CPU limits
+            el-col(:span="12")
+              el-input(v-model="minio.config['resources.limits.memory']")
+                template(slot="prepend") Memory limits
+        el-form-item(label="persistence")
+          el-switch(v-model="minio.config['persistence.enabled']" active-color="#13ce66" inactive-color="#ff4949")
+        el-form-item(v-if="minio.config['persistence.enabled']" label="storageClass")
+          el-select(v-model="minio.config['persistence.storageClass']" placeholder="storageClass")
+            el-option(v-for="s in ['longhorn','nfs-provisioner']" :key="s" :label="s" :value="s")
+        el-form-item(v-if="minio.config['persistence.enabled']" label="size")
           el-select(v-model="minio.config['persistence.size']" placeholder="size")
             el-option(v-for="s in ['2G','10G','50G','100G','500G']" :key="s" :label="s" :value="s")
       .dialog-footer(slot="footer")
@@ -24,7 +45,7 @@
         el-form-item(label="username")
           el-input(v-model="mysql.config.mysqlUser")
         el-form-item(label="password")
-          el-input(v-model="mysql.config.mysqlPassword")
+          el-input(show-password v-model="mysql.config.mysqlPassword")
         el-form-item(label="database")
           el-input(v-model="mysql.config.mysqlDatabase")
         el-form-item(label="size")
@@ -39,7 +60,7 @@
         el-form-item(label="username")
           el-input(v-model="mongodb.config.mongodbUsername")
         el-form-item(label="password")
-          el-input(v-model="mongodb.config.mongodbPassword")
+          el-input(show-password v-model="mongodb.config.mongodbPassword")
         el-form-item(label="database")
           el-input(v-model="mongodb.config.mongodbDatabase")
         el-form-item(label="size")
@@ -61,9 +82,15 @@ export default {
         config: {
           accessKey: "",
           secretKey: "",
+          "persistence.enabled": false,
           "persistence.size": "2G",
+          "persistence.storageClass": "longhorn",
           "service.type": "NodePort",
-          "service.nodePort": ""
+          "service.nodePort": "",
+          "resources.limits.cpu": "1000m",
+          "resources.limits.memory": "512Mi",
+          "resources.requests.cpu": "100m",
+          "resources.requests.memory": "128Mi"
         }
       },
       mysql: {
