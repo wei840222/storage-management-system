@@ -1,4 +1,4 @@
-FROM node AS web
+FROM node:12-alpine AS web
 WORKDIR /app
 ADD ./web /app
 RUN yarn && yarn build
@@ -9,7 +9,7 @@ RUN sed -i -e "s|%SPEC_URL%|openapi.yaml|g" /usr/share/nginx/html/index.html && 
     sed -i -e "s|%PAGE_TITLE%|ReDoc|g" /usr/share/nginx/html/index.html && \
     sed -i -e "s|%PAGE_FAVICON%|favicon.png|g" /usr/share/nginx/html/index.html
 
-FROM golang:alpine
+FROM golang:1.12.4-alpine
 RUN apk add --update --no-cache git bash curl nodejs ca-certificates && \
     curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.13.1-linux-amd64.tar.gz |tar xvz && \
     mv linux-amd64/helm /usr/bin/helm && \
