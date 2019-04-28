@@ -124,6 +124,7 @@ export default {
   methods: {
     async create(data) {
       data.creating = true;
+      data.config['persistence.enabled'] = data.config['persistence.enabled'] ? 'true' : 'false'
       const res = await this.$axios.post("/storage", data);
       if (res.data.code === 201) {
         res.data.data.persistentVolumeClaim = {
