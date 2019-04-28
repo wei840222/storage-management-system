@@ -1,7 +1,7 @@
-FROM node:12-alpine AS web
+FROM node:12-stretch AS web
 WORKDIR /app
 ADD ./web /app
-RUN yarn && yarn build
+RUN yarn install && yarn build
 
 FROM redocly/redoc AS api-doc
 ADD ./openapi.yaml /usr/share/nginx/html/openapi.yaml
