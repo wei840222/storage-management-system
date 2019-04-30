@@ -10,7 +10,7 @@
       template(v-if="scope.row.config['persistence.storageClass'] === 'longhorn'" slot-scope="scope")
         el-popover(placement="top-start" trigger="hover" :content="getSizeString(scope.row.persistentVolumeClaim.size)+'/'+getSizeString(scope.row.persistentVolumeClaim.capacity)")
           el-progress(slot="reference" :text-inside="true" :stroke-width="18" color="#8e71c7" :percentage="getPercentage(scope.row.persistentVolumeClaim.size, scope.row.persistentVolumeClaim.capacity)")
-    el-table-column(label="Storage Class" prop="config['persistence.storageClass']")
+    el-table-column(label="Storage Class" prop="config['persistence.storageClass']" sortable)
       template(slot-scope="scope")
         el-tag(size="mini" type="warning") {{ scope.row.config['persistence.storageClass'] }}
     el-table-column(label="Endpoint" prop="endpoint.port")
