@@ -48,7 +48,28 @@
           el-input(show-password v-model="mysql.config.mysqlPassword")
         el-form-item(label="database")
           el-input(v-model="mysql.config.mysqlDatabase")
-        el-form-item(label="size")
+        el-form-item(label="resources")
+          el-row(type="flex" justify="space-between")
+            el-col(:span="11")
+              el-input(v-model="mysql.config['resources.requests.cpu']")
+                template(slot="prepend") CPU requests
+            el-col(:span="12")
+              el-input(v-model="mysql.config['resources.requests.memory']")
+                template(slot="prepend") Memory requests
+        el-form-item
+          el-row(type="flex" justify="space-between")
+            el-col(:span="11")
+              el-input(v-model="mysql.config['resources.limits.cpu']")
+                template(slot="prepend") CPU limits
+            el-col(:span="12")
+              el-input(v-model="mysql.config['resources.limits.memory']")
+                template(slot="prepend") Memory limits
+        el-form-item(label="persistence")
+          el-switch(v-model="mysql.config['persistence.enabled']" active-color="#13ce66" inactive-color="#ff4949"  active-value="true" inactive-value="false")
+        el-form-item(v-if="mysql.config['persistence.enabled'] == 'true'" label="storageClass")
+          el-select(v-model="mysql.config['persistence.storageClass']" placeholder="storageClass")
+            el-option(v-for="s in ['longhorn','nfs-provisioner']" :key="s" :label="s" :value="s")
+        el-form-item(v-if="mysql.config['persistence.enabled'] == 'true'" label="size")
           el-select(v-model="mysql.config['persistence.size']" placeholder="size")
             el-option(v-for="s in ['2G','10G','50G','100G','500G']" :key="s" :label="s" :value="s")
       .dialog-footer(slot="footer")
@@ -63,7 +84,28 @@
           el-input(show-password v-model="mongodb.config.mongodbPassword")
         el-form-item(label="database")
           el-input(v-model="mongodb.config.mongodbDatabase")
-        el-form-item(label="size")
+        el-form-item(label="resources")
+          el-row(type="flex" justify="space-between")
+            el-col(:span="11")
+              el-input(v-model="mongodb.config['resources.requests.cpu']")
+                template(slot="prepend") CPU requests
+            el-col(:span="12")
+              el-input(v-model="mongodb.config['resources.requests.memory']")
+                template(slot="prepend") Memory requests
+        el-form-item
+          el-row(type="flex" justify="space-between")
+            el-col(:span="11")
+              el-input(v-model="mongodb.config['resources.limits.cpu']")
+                template(slot="prepend") CPU limits
+            el-col(:span="12")
+              el-input(v-model="mongodb.config['resources.limits.memory']")
+                template(slot="prepend") Memory limits
+        el-form-item(label="persistence")
+          el-switch(v-model="mongodb.config['persistence.enabled']" active-color="#13ce66" inactive-color="#ff4949"  active-value="true" inactive-value="false")
+        el-form-item(v-if="mongodb.config['persistence.enabled'] == 'true'" label="storageClass")
+          el-select(v-model="mongodb.config['persistence.storageClass']" placeholder="storageClass")
+            el-option(v-for="s in ['longhorn','nfs-provisioner']" :key="s" :label="s" :value="s")
+        el-form-item(v-if="mongodb.config['persistence.enabled'] == 'true'" label="size")
           el-select(v-model="mongodb.config['persistence.size']" placeholder="size")
             el-option(v-for="s in ['2G','10G','50G','100G','500G']" :key="s" :label="s" :value="s")
       .dialog-footer(slot="footer")
@@ -101,9 +143,15 @@ export default {
           mysqlUser: "",
           mysqlPassword: "",
           mysqlDatabase: "database",
+          "persistence.enabled": 'false',
           "persistence.size": "2G",
+          "persistence.storageClass": "longhorn",
           "service.type": "NodePort",
-          "service.nodePort": ""
+          "service.nodePort": "",
+          "resources.limits.cpu": "1000m",
+          "resources.limits.memory": "512Mi",
+          "resources.requests.cpu": "100m",
+          "resources.requests.memory": "128Mi"
         }
       },
       mongodb: {
@@ -114,9 +162,15 @@ export default {
           mongodbUsername: "",
           mongodbPassword: "",
           mongodbDatabase: "database",
+          "persistence.enabled": 'false',
           "persistence.size": "2G",
+          "persistence.storageClass": "longhorn",
           "service.type": "NodePort",
-          "service.nodePort": ""
+          "service.nodePort": "",
+          "resources.limits.cpu": "1000m",
+          "resources.limits.memory": "512Mi",
+          "resources.requests.cpu": "100m",
+          "resources.requests.memory": "128Mi"
         }
       }
     };
