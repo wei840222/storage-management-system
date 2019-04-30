@@ -41,7 +41,7 @@
         el-button(@click="minio.dialogFormVisible = false") Cancel
 
     el-dialog(title="Create mysql storage" :visible.sync="mysql.dialogFormVisible")
-      el-form(:model="mysql.config" label-position="left" label-width="80px")
+      el-form(:model="mysql.config" label-position="left" label-width="120px")
         el-form-item(label="username")
           el-input(v-model="mysql.config.mysqlUser")
         el-form-item(label="password")
@@ -77,7 +77,7 @@
         el-button(@click="mysql.dialogFormVisible = false") Cancel
 
     el-dialog(title="Create mongodb storage" :visible.sync="mongodb.dialogFormVisible")
-      el-form(:model="mongodb.config" label-position="left" label-width="80px")
+      el-form(:model="mongodb.config" label-position="left" label-width="120px")
         el-form-item(label="username")
           el-input(v-model="mongodb.config.mongodbUsername")
         el-form-item(label="password")
