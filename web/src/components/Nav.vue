@@ -124,7 +124,7 @@ export default {
         config: {
           accessKey: "",
           secretKey: "",
-          "persistence.enabled": 'false',
+          "persistence.enabled": "false",
           "persistence.size": "2G",
           "persistence.storageClass": "longhorn",
           "service.type": "NodePort",
@@ -143,7 +143,7 @@ export default {
           mysqlUser: "",
           mysqlPassword: "",
           mysqlDatabase: "database",
-          "persistence.enabled": 'false',
+          "persistence.enabled": "false",
           "persistence.size": "2G",
           "persistence.storageClass": "longhorn",
           "service.type": "NodePort",
@@ -162,7 +162,7 @@ export default {
           mongodbUsername: "",
           mongodbPassword: "",
           mongodbDatabase: "database",
-          "persistence.enabled": 'false',
+          "persistence.enabled": "false",
           "persistence.size": "2G",
           "persistence.storageClass": "longhorn",
           "service.type": "NodePort",
@@ -178,6 +178,10 @@ export default {
   methods: {
     async create(data) {
       data.creating = true;
+      if (data.config["persistence.enabled"] === "false") {
+        data.config["persistence.size"] = "0G";
+        data.config["persistence.storageClass"] = "N/A";
+      }
       const res = await this.$axios.post("/storage", data);
       if (res.data.code === 201) {
         res.data.data.persistentVolumeClaim = {
