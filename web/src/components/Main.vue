@@ -18,7 +18,7 @@
         a(v-if="scope.row.chartName === 'stable/minio'" :href="`http://${scope.row.endpoint.host}:${scope.row.endpoint.port}`" target="_blank")
           el-tag(size="mini" type="primary") http://{{ scope.row.endpoint.host }}:{{ scope.row.endpoint.port }}
         el-tag(v-else size="mini" type="primary") {{ scope.row.endpoint.host }}:{{ scope.row.endpoint.port }}
-    el-table-column(label="Status" width="110" prop="status")
+    el-table-column(label="Status" width="110" prop="status" sortable)
       template(slot-scope="scope")
         el-tag(:type="scope.row.status === 'running' ? 'success' : 'warning'" disable-transitions) {{ scope.row.status }}
     el-table-column(label="Operation")
