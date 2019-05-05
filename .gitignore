@@ -23,3 +23,5 @@ yarn-error.log*
 .ipynb_checkpoints\
 minio_test_data
 file.txt
+
+loadTest/\.ipynb_checkpoints/
